@@ -20,20 +20,20 @@ public class DbConnectionTest {
   MemberRepository memberRepository;
 
 
-  @Test
-  @DisplayName("MariaDB 연결 확인")
-  public void MariaDB연결확인(){
-
-    Member newMember = new Member("jungwoo");
-
-    memberRepository.save(newMember);
-
-
-    List<Member> memberList = memberRepository.findAll();
-
-    Member member = memberList.get(0);
-    assertThat(member.getName()).isEqualTo("jungwoo");
-
-  }
+//  @Test
+//  @DisplayName("MariaDB 연결 확인")
+//  public void MariaDB연결확인(){
+//
+//    Member newMember = new Member("jungwoo");
+//
+//    memberRepository.save(newMember);
+//
+//
+//    List<Member> memberList = memberRepository.findAll();
+//
+//    Member member = memberList.get(0);
+//    assertThat(member.getName()).isEqualTo("jungwoo");
+//
+//  }
 }
 
