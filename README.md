@@ -33,7 +33,7 @@ This project is migration to React &amp; Spring boot. ( original backend is Node
          - 즉, 백엔드서버가 할 일을 프론트서버가 해주는 것.
          - 그러기에 백엔드 서버의 ip주소나 port번호가 바뀌더라도 프론트인 react에서 한 라인으로 변경가능.
 
-      2. Proxy 설정 두가지방법.
+      2. Proxy 설정 두가지방법(프론트엔드-react)
 
          1. setupProxy.js
 
@@ -45,4 +45,3 @@ This project is migration to React &amp; Spring boot. ( original backend is Node
 
             
 
-3. 1. 1. 

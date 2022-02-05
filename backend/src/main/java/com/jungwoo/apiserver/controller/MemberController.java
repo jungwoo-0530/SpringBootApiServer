@@ -6,19 +6,17 @@ import com.jungwoo.apiserver.serviece.MemberService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class MemberController {
 
   private final MemberService memberService;
 
   @PostMapping("/api/users/new")
-  @ResponseBody
   public dupCheck registerMember(@RequestBody CreateMemberRequest createMemberRequest)
   {
     dupCheck result = new dupCheck("",
