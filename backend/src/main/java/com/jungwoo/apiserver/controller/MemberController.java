@@ -2,19 +2,26 @@ package com.jungwoo.apiserver.controller;
 
 import com.jungwoo.apiserver.Dto.Member.CreateMemberRequest;
 import com.jungwoo.apiserver.domain.Member;
+import com.jungwoo.apiserver.security.jwt.JwtAuthenticationProvider;
 import com.jungwoo.apiserver.serviece.MemberService;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequiredArgsConstructor
 public class MemberController {
 
   private final MemberService memberService;
+  private final JwtAuthenticationProvider jwtAuthenticationProvider;
+  private final PasswordEncoder passwordEncoder;
 
   @PostMapping("/api/users/new")
   public dupCheck registerMember(@RequestBody CreateMemberRequest createMemberRequest)
@@ -57,6 +64,65 @@ public class MemberController {
   }
 
 
+
+  @PostMapping("/api/users/login")
+  public LoginForm login(@RequestBody LoginForm loginForm,
+                    HttpServletResponse response){
+    Member member = memberService.findByLoginId(loginForm.getLoginId())
+        .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 ID입니다."));
+    if (!passwordEncoder.matches(loginForm.getPassword(), member.getPassword())) {
+      throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+    }
+
+    String token = jwtAuthenticationProvider.createToken(member.getLoginId(), member.getRole());
+    response.setHeader("x-access-token", token);
+
+    Cookie cookie = new Cookie("x-access-token", token);
+    cookie.setPath("/");
+    cookie.setHttpOnly(true);
+    cookie.setSecure(false);
+    response.addCookie(cookie);
+
+    return LoginForm.builder()
+        .loginId(member.getLoginId())
+        .auth(member.getRole())
+        .build();
+  }
+
+  @Getter
+  @Builder
+  public static class LoginForm{
+
+    private String loginId;
+    private String password;
+    private String auth;
+
+
+  }
+
+  //request 헤더에 있는 JWT 토큰값으로 해당하는 사용자.
+  //즉, 현재 로그인한 사용자의 정보(loginId, role)을 가져올 수 있음.
+  @GetMapping("/api/users/auth")
+  public AuthResponse memberAuth(HttpServletRequest req){
+
+    String token = jwtAuthenticationProvider.resolveToken(req);
+    String loginId = jwtAuthenticationProvider.getUserPk(token);//loginId 출력.
+    String role = jwtAuthenticationProvider.getRole(token);
+
+    return AuthResponse.builder()
+        .loginId(loginId)
+        .auth(role).build();
+  }
+
+
+  @Getter
+  @Builder
+  public static class AuthResponse{
+
+    private String loginId;
+    private String auth;
+
+  }
 
 
 
