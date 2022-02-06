@@ -9,10 +9,12 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.Cookie;
@@ -20,17 +22,17 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 
-@RequiredArgsConstructor
+@Component
 public class JwtAuthenticationProvider {
 
   private String secretKey = "secret";
 
   private long tokenValidTime = 1000L * 60 * 60;
-
-  private final UserDetailsService userDetailsService;
+  @Autowired
+  private UserDetailsService userDetailsService;
 
   // JWT 토큰 생성
-  public String createToken(String userPk, List<String> roles) {
+  public String createToken(String userPk, String roles) {
     Claims claims = Jwts.claims().setSubject(userPk); // JWT payload 에 저장되는 정보단위
     claims.put("roles", roles); // 정보는 key / value 쌍으로 저장된다.
     Date now = new Date();
@@ -41,6 +43,11 @@ public class JwtAuthenticationProvider {
         .signWith(SignatureAlgorithm.HS256, secretKey)  // 사용할 암호화 알고리즘과
         // signature 에 들어갈 secret값 세팅
         .compact();
+  }
+
+  public String getRole(String jwt) {
+    Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwt);
+    return (String) claims.getBody().get("roles");
   }
 
   // JWT 토큰에서 인증 정보 조회
@@ -57,7 +64,7 @@ public class JwtAuthenticationProvider {
   // Request의 Header에서 token 값을 가져옵니다. "X-AUTH-TOKEN" : "TOKEN값'
   public String resolveToken(HttpServletRequest request) {
     String token = null;
-    Cookie cookie = WebUtils.getCookie(request, "Authorization");
+    Cookie cookie = WebUtils.getCookie(request, "x-access-token");
     if(cookie != null) token = cookie.getValue();
     return token;
   }

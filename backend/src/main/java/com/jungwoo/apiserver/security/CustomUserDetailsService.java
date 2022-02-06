@@ -2,6 +2,7 @@ package com.jungwoo.apiserver.security;
 
 import com.jungwoo.apiserver.domain.Member;
 import com.jungwoo.apiserver.repository.MemberRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
+
   private final MemberRepository memberRepository;
 
   public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {

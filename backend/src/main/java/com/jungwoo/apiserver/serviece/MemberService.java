@@ -3,17 +3,24 @@ package com.jungwoo.apiserver.serviece;
 import com.jungwoo.apiserver.domain.Member;
 import com.jungwoo.apiserver.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class MemberService {
 
-  public final MemberRepository memberRepository;
+  private final MemberRepository memberRepository;
 
-  public final PasswordEncoder passwordEncoder;
+//  @Autowired
+//  private BCryptPasswordEncoder bCryptPasswordEncoder;
+  private final PasswordEncoder passwordEncoder;
 
   public boolean dupLoginIdCheck(String loginId) {
     return memberRepository.existsByLoginId(loginId);
@@ -31,5 +38,10 @@ public class MemberService {
 
     memberRepository.save(member);
 
+  }
+
+  @Transactional(readOnly = true)
+  public Optional<Member> findByLoginId(String loginId) {
+    return memberRepository.findByLoginId(loginId);
   }
 }
