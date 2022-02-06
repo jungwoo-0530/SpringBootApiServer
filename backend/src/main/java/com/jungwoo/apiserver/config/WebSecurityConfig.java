@@ -1,6 +1,8 @@
 package com.jungwoo.apiserver.config;
 
 import com.jungwoo.apiserver.security.CustomUserDetailsService;
+import com.jungwoo.apiserver.security.jwt.JwtAccessDeniedHandler;
+import com.jungwoo.apiserver.security.jwt.JwtAuthenticationEntryPoint;
 import com.jungwoo.apiserver.security.jwt.JwtAuthenticationFilter;
 import com.jungwoo.apiserver.security.jwt.JwtAuthenticationProvider;
 import lombok.AllArgsConstructor;
@@ -27,6 +29,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   private final CustomUserDetailsService customUserDetailService;
 
   private final JwtAuthenticationProvider jwtAuthenticationProvider;
+  private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+  private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
 
   @Bean
@@ -40,8 +44,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     http.cors()
         .and()
         .csrf().disable()
+        .exceptionHandling()
+        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+        .accessDeniedHandler(jwtAccessDeniedHandler)
+        .and()
         .authorizeRequests()
-        .antMatchers("/**").permitAll()
+        .antMatchers("/api/auth/**").permitAll()
+        .anyRequest().authenticated()
         .and()
         .formLogin().disable()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -64,15 +73,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
 
+//  @Override
+//  public void configure(WebSecurity web) throws Exception {
+//    web.ignoring()
+//        .antMatchers("/api/users/new");
+//  }
+
   @Bean
   @Override
   public AuthenticationManager authenticationManagerBean() throws Exception {
     return super.authenticationManagerBean();
-  }
-
-  @Override
-  public void configure(WebSecurity web) throws Exception {
-    web.ignoring()
-        .antMatchers("/api/users/new");
   }
 }

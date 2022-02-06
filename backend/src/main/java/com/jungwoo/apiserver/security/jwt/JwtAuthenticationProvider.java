@@ -4,11 +4,8 @@ package com.jungwoo.apiserver.security.jwt;
 feature : JWT을 생성, 검증, 정보추출 해주는 클래스이다.
  */
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.RequiredArgsConstructor;
+import io.jsonwebtoken.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,9 +17,9 @@ import org.springframework.web.util.WebUtils;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
-import java.util.List;
 
 @Component
+@Slf4j
 public class JwtAuthenticationProvider {
 
   private String secretKey = "secret";
@@ -65,7 +62,7 @@ public class JwtAuthenticationProvider {
   public String resolveToken(HttpServletRequest request) {
     String token = null;
     Cookie cookie = WebUtils.getCookie(request, "x-access-token");
-    if(cookie != null) token = cookie.getValue();
+    if (cookie != null) token = cookie.getValue();
     return token;
   }
 
@@ -74,8 +71,16 @@ public class JwtAuthenticationProvider {
     try {
       Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
       return !claims.getBody().getExpiration().before(new Date());
-    } catch (Exception e) {
-      return false;
+    } catch (SecurityException | MalformedJwtException e) {
+      log.info("잘못된 JWT 서명입니다.");
+    } catch (ExpiredJwtException e) {
+      log.info("만료된 JWT 토큰입니다.");
+    } catch (UnsupportedJwtException e) {
+      log.info("지원되지 않는 JWT 토큰입니다.");
+    } catch (IllegalArgumentException e) {
+      log.info("JWT 토큰이 잘못되었습니다.");
     }
+    return false;
   }
+
 }

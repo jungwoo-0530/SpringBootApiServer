@@ -23,7 +23,7 @@ public class MemberController {
   private final JwtAuthenticationProvider jwtAuthenticationProvider;
   private final PasswordEncoder passwordEncoder;
 
-  @PostMapping("/api/users/new")
+  @PostMapping("/api/auth/new")
   public dupCheck registerMember(@RequestBody CreateMemberRequest createMemberRequest)
   {
     dupCheck result = new dupCheck("",
@@ -65,7 +65,7 @@ public class MemberController {
 
 
 
-  @PostMapping("/api/users/login")
+  @PostMapping("/api/auth/login")
   public LoginForm login(@RequestBody LoginForm loginForm,
                     HttpServletResponse response){
     Member member = memberService.findByLoginId(loginForm.getLoginId())
@@ -102,7 +102,7 @@ public class MemberController {
 
   //request 헤더에 있는 JWT 토큰값으로 해당하는 사용자.
   //즉, 현재 로그인한 사용자의 정보(loginId, role)을 가져올 수 있음.
-  @GetMapping("/api/users/auth")
+  @GetMapping("/api/auth/auth")
   public AuthResponse memberAuth(HttpServletRequest req){
 
     String token = jwtAuthenticationProvider.resolveToken(req);
