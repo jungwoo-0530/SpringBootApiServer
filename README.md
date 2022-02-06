@@ -45,3 +45,9 @@ This project is migration to React &amp; Spring boot. ( original backend is Node
 
             
 
+------------------------------
+
+1. 로그인(jwt토큰)
+2. 권한 부여.
+3. 권한 부여에 따른 인가.
+4. 게시물(post)

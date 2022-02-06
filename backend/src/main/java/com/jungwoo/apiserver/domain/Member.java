@@ -22,6 +22,7 @@ public class Member extends BaseTimeEntity {
   private String name;
   private String email;
   private String telephone;
+  private String role;
 
 
 }

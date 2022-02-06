@@ -36,7 +36,8 @@ public class MemberController {
           loginId(createMemberRequest.getLoginId()).
           email(createMemberRequest.getEmail()).
           password(createMemberRequest.getPassword()).
-          telephone(createMemberRequest.getTelephone()).build();
+          telephone(createMemberRequest.getTelephone()).
+          role("MEMBER").build();
 
       result.setMessage("회원가입이 완료되었습니다.");
       memberService.save(newMember);
@@ -54,6 +55,9 @@ public class MemberController {
     boolean dupEmailCheck;
 
   }
+
+
+
 
 
 

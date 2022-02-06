@@ -1,5 +1,6 @@
 package com.jungwoo.apiserver.serviece;
 
+import com.jungwoo.apiserver.ApiserverApplication;
 import com.jungwoo.apiserver.domain.Member;
 import com.jungwoo.apiserver.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -45,7 +46,6 @@ class MemberServiceTest {
 
 
   @Test
-  @Transactional
   @DisplayName("Auditing적용")
   public void Auditing적용() throws Exception{
       //given
@@ -63,7 +63,7 @@ class MemberServiceTest {
     Member findMember = list.get(0);
       //then
 
-    assertThat(findMember.getCreatedDate()).isAfter(now);
+    assertThat(findMember.getCreateDate()).isAfter(now);
 
   }
 
