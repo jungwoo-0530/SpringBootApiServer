@@ -6,6 +6,7 @@ import com.jungwoo.apiserver.security.jwt.JwtAuthenticationEntryPoint;
 import com.jungwoo.apiserver.security.jwt.JwtAuthenticationFilter;
 import com.jungwoo.apiserver.security.jwt.JwtAuthenticationProvider;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
@@ -23,11 +24,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   private final CustomUserDetailsService customUserDetailService;
-
   private final JwtAuthenticationProvider jwtAuthenticationProvider;
   private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
   private final JwtAccessDeniedHandler jwtAccessDeniedHandler;

@@ -5,6 +5,7 @@ feature : JWT을 생성, 검증, 정보추출 해주는 클래스이다.
  */
 
 import io.jsonwebtoken.*;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,13 +21,15 @@ import java.util.Date;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class JwtAuthenticationProvider {
 
-  private String secretKey = "secret";
+  private final UserDetailsService userDetailsService;
+
+  private final String secretKey = "secret";
 
   private long tokenValidTime = 1000L * 60 * 60;
-  @Autowired
-  private UserDetailsService userDetailsService;
+
 
   // JWT 토큰 생성
   public String createToken(String userPk, String roles) {

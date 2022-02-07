@@ -6,10 +6,10 @@ import com.jungwoo.apiserver.domain.Member;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
-public class MemberAccount extends User {
+public class CustomUserDetails extends User {
   private final Member member;
 
-  public MemberAccount(Member member, Collection<? extends GrantedAuthority> authorities) {
+  public CustomUserDetails(Member member, Collection<? extends GrantedAuthority> authorities) {
     super(member.getLoginId(), member.getPassword(), authorities);
     this.member = member;
   }
@@ -19,6 +19,8 @@ public class MemberAccount extends User {
     return super.getPassword();
   }
 
+  //핵심 메서드.
+  //DB PK값
   @Override
   public String getUsername() {
     return super.getUsername();

@@ -85,7 +85,7 @@ public class MemberController {
 
     return LoginForm.builder()
         .loginId(member.getLoginId())
-        .auth(member.getRole())
+        .role(member.getRole())
         .build();
   }
 
@@ -95,9 +95,7 @@ public class MemberController {
 
     private String loginId;
     private String password;
-    private String auth;
-
-
+    private String role;
   }
 
   //request 헤더에 있는 JWT 토큰값으로 해당하는 사용자.
