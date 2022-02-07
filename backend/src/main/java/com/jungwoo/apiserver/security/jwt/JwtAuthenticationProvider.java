@@ -1,9 +1,5 @@
 package com.jungwoo.apiserver.security.jwt;
 
-/*
-feature : JWT을 생성, 검증, 정보추출 해주는 클래스이다.
- */
-
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +13,11 @@ import org.springframework.web.util.WebUtils;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
-
+/**
+ * fileName     : JwtAuthenticationProvider
+ * author       : jungwoo
+ * description  : JWT을 생성, 검증, 정보추출 해주는 클래스이다.
+ */
 @Component
 @Slf4j
 @RequiredArgsConstructor

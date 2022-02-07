@@ -6,7 +6,11 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import java.time.ZonedDateTime;
-
+/**
+ * fileName     : BaseTimeEntity
+ * author       : jungwoo
+ * description  : Jpa Auditing를 활용하여 DB에 생성시 create시간과 Update 시간을 자동으로 insert해준다.
+ */
 @Getter
 @MappedSuperclass
 public class BaseTimeEntity {

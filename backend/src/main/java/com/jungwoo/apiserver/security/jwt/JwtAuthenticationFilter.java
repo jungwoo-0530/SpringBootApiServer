@@ -9,13 +9,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-/*
-인증에 성공하면 authentication객체를 Context안에 넣는다.
-
-인증에 실패하면 아무런 과정 없이 다음 필터로 넘어간다.
-
+/**
+ * fileName     : JwtAuthenticationFilter
+ * author       : jungwoo
+ * description  : 인터셉터. 클라이언트의 모든 요청에 대해 intercept하여 인증에 성공하면 authentication객체를 Context안에 넣는다. 인증에 실패하면 아무런 과정 없이 다음 필터로 넘어간다.
  */
-
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 

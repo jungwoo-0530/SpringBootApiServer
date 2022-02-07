@@ -12,7 +12,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * fileName     : CustomUserDetailsService
+ * author       : jungwoo
+ * description  : Spring Security에서 유저의 정보를 가져오는 인터페이스(UserDetailsService)의 구현체.
+ */
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {

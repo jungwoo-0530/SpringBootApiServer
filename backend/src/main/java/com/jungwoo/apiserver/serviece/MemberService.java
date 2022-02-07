@@ -8,7 +8,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-
+/**
+ * fileName     : MemberService
+ * author       : jungwoo
+ * description  : Member Entity와 관련된 서비스 계층
+ */
 @Service
 @RequiredArgsConstructor
 public class MemberService {

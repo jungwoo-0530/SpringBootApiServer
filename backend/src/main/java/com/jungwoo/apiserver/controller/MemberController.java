@@ -14,7 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+/**
+ * fileName     : MemberController
+ * author       : jungwoo
+ * description  : Member Entity와 관련된 컨트롤러
+ */
 @RestController
 @RequiredArgsConstructor
 public class MemberController {

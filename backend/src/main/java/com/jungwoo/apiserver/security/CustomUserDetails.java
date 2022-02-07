@@ -5,7 +5,11 @@ import java.util.Collection;
 import com.jungwoo.apiserver.domain.Member;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-
+/**
+ * fileName     : CustomUserDetails
+ * author       : jungwoo
+ * description  : 사용자의 정보를 담는 인터페이스(UserDetails) 구현체
+ */
 public class CustomUserDetails extends User {
   private final Member member;
 

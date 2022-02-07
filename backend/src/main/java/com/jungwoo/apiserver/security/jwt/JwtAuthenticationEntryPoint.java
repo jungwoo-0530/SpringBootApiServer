@@ -8,7 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
-
+/**
+ * fileName     : JwtAuthenticationEntryPoint
+ * author       : jungwoo
+ * description  : 인증에 실패한 사용자의 response에 HttpServletResponse.SC_UNAUTHORIZED를 담아줌, 401 에러
+ */
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Serializable {
 

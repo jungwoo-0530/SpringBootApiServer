@@ -1,8 +1,12 @@
 package com.jungwoo.apiserver.domain;
 
 import lombok.*;
-
 import javax.persistence.*;
+/**
+ * fileName     : Member
+ * author       : jungwoo
+ * description  : 회원 Entity
+ */
 
 @Entity
 @Getter
