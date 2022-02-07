@@ -85,11 +85,12 @@ public class MemberController {
     cookie.setPath("/");
     cookie.setHttpOnly(true);
     cookie.setSecure(false);
+
     response.addCookie(cookie);
 
     return LoginForm.builder()
         .loginId(member.getLoginId())
-        .role(member.getRole())
+        .password(token)
         .build();
   }
 
@@ -99,20 +100,19 @@ public class MemberController {
 
     private String loginId;
     private String password;
-    private String role;
   }
 
   //request 헤더에 있는 JWT 토큰값으로 해당하는 사용자.
   //즉, 현재 로그인한 사용자의 정보(loginId, role)을 가져올 수 있음.
+  //ResponseEntity<>로 응답하기.
   @GetMapping("/auth")
   public AuthResponse memberAuth(HttpServletRequest req){
 
     String token = jwtAuthenticationProvider.resolveToken(req);
-    String loginId = jwtAuthenticationProvider.getUserPk(token);//loginId 출력.
+//    String loginId = jwtAuthenticationProvider.getUserPk(token);//loginId 출력.
     String role = jwtAuthenticationProvider.getRole(token);
 
     return AuthResponse.builder()
-        .loginId(loginId)
         .auth(role).build();
   }
 
@@ -121,11 +121,9 @@ public class MemberController {
   @Builder
   public static class AuthResponse{
 
-    private String loginId;
     private String auth;
 
   }
-
 
 
 

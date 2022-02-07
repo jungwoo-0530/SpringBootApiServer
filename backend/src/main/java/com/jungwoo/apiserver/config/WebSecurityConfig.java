@@ -52,7 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .accessDeniedHandler(jwtAccessDeniedHandler)
         .and()
         .authorizeRequests()
-        .antMatchers("/api/auth/**").permitAll()
+        .antMatchers("/register","/login","/auth").permitAll()
         .anyRequest().authenticated()
         .and()
         .formLogin().disable()
