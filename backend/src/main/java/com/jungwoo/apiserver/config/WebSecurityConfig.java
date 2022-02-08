@@ -1,10 +1,7 @@
 package com.jungwoo.apiserver.config;
 
 import com.jungwoo.apiserver.security.CustomUserDetailsService;
-import com.jungwoo.apiserver.security.jwt.JwtAccessDeniedHandler;
-import com.jungwoo.apiserver.security.jwt.JwtAuthenticationEntryPoint;
-import com.jungwoo.apiserver.security.jwt.JwtAuthenticationFilter;
-import com.jungwoo.apiserver.security.jwt.JwtAuthenticationProvider;
+import com.jungwoo.apiserver.security.jwt.*;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -52,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .accessDeniedHandler(jwtAccessDeniedHandler)
         .and()
         .authorizeRequests()
-        .antMatchers("/register","/login","/auth").permitAll()
+        .antMatchers("/register","/login","/test/**").permitAll()
         .anyRequest().authenticated()
         .and()
         .formLogin().disable()

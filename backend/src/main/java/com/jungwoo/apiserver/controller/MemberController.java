@@ -5,6 +5,10 @@ import com.jungwoo.apiserver.domain.Member;
 import com.jungwoo.apiserver.security.jwt.JwtAuthenticationProvider;
 import com.jungwoo.apiserver.serviece.MemberService;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
+
 /**
  * fileName     : MemberController
  * author       : jungwoo
@@ -21,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class MemberController {
 
   private final MemberService memberService;
@@ -68,52 +75,59 @@ public class MemberController {
   }
 
 
+@PostMapping("/login")
+public ResponseEntity<TokenResponse> login(@RequestBody loginRequest loginReq){
+  Member member = memberService.findByLoginId(loginReq.getLoginId())
+      .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 ID입니다."));
+  if (!passwordEncoder.matches(loginReq.getPassword(), member.getPassword())) {
+    throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+  }
 
-  @PostMapping("/login")
-  public LoginForm login(@RequestBody LoginForm loginForm,
-                    HttpServletResponse response){
-    Member member = memberService.findByLoginId(loginForm.getLoginId())
-        .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 ID입니다."));
-    if (!passwordEncoder.matches(loginForm.getPassword(), member.getPassword())) {
-      throw new IllegalArgumentException("잘못된 비밀번호입니다.");
-    }
-
-    String token = jwtAuthenticationProvider.createToken(member.getLoginId(), member.getRole());
-    response.setHeader("x-access-token", token);
-
-    Cookie cookie = new Cookie("x-access-token", token);
-    cookie.setPath("/");
-    cookie.setHttpOnly(true);
-    cookie.setSecure(false);
-
-    response.addCookie(cookie);
-
-    return LoginForm.builder()
-        .loginId(member.getLoginId())
-        .password(token)
-        .build();
+  String token = jwtAuthenticationProvider.createToken(member.getLoginId());
+  return ResponseEntity.ok().body(TokenResponse.builder()
+      .tokenType("bearer")
+      .accessToken(token)
+      .tokenExpired(jwtAuthenticationProvider.getTokenExpired())
+      .build());
+}
+  @Getter
+  @Builder
+  public static class TokenResponse {
+    private String accessToken;
+    private Long tokenExpired;
+    private String tokenType;
   }
 
   @Getter
   @Builder
-  public static class LoginForm{
+  public static class loginRequest{
 
     private String loginId;
     private String password;
   }
 
-  //request 헤더에 있는 JWT 토큰값으로 해당하는 사용자.
-  //즉, 현재 로그인한 사용자의 정보(loginId, role)을 가져올 수 있음.
-  //ResponseEntity<>로 응답하기.
+//  request 헤더에 있는 JWT 토큰값으로 해당하는 사용자.
+//  즉, 현재 로그인한 사용자의 정보(loginId, role)을 가져올 수 있음.
+//  ResponseEntity<>로 응답하기.
   @GetMapping("/auth")
-  public AuthResponse memberAuth(HttpServletRequest req){
+  public String memberAuth(HttpServletRequest req){
 
-    String token = jwtAuthenticationProvider.resolveToken(req);
+    String a = req.getHeader("Authorization");
+    log.info(a);
+//    Cookie[] cookies = req.getCookies();
+//    for(Cookie a : cookies){
+//      System.out.println(a.getName() + " :" +a.getValue());
+//    }
+//    String authorization = req.getHeader("Co");
+//    String token = jwtAuthenticationProvider.resolveToken(req);
 //    String loginId = jwtAuthenticationProvider.getUserPk(token);//loginId 출력.
-    String role = jwtAuthenticationProvider.getRole(token);
-
-    return AuthResponse.builder()
-        .auth(role).build();
+//    String role = jwtAuthenticationProvider.getRole(token);
+//
+//    return AuthResponse.builder()
+//        .auth(role).build();
+//    return AuthResponse.builder()
+//        .auth(authorization).build();
+    return a;
   }
 
 
@@ -127,7 +141,20 @@ public class MemberController {
 
 
 
+  @PostMapping("/test/auth")
+  private String getToken(HttpServletRequest request) {
+    log.info("testAuth");
 
+    String header = request.getHeader("Authorization");
+
+    log.info(header);
+
+    if (header != null && header.startsWith("Bearer ")) {
+      return header.replace("Bearer ","");
+    }
+
+    return null;
+  }
 
 
 }

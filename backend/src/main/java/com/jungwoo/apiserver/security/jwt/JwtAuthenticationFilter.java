@@ -1,7 +1,9 @@
 package com.jungwoo.apiserver.security.jwt;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -15,23 +17,22 @@ import java.io.IOException;
  * description  : 인터셉터. 클라이언트의 모든 요청에 대해 intercept하여 인증에 성공하면 authentication객체를 Context안에 넣는다. 인증에 실패하면 아무런 과정 없이 다음 필터로 넘어간다.
  */
 
+@RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
-  public JwtAuthenticationFilter(JwtAuthenticationProvider provider) {
-    jwtAuthenticationProvider = provider;
-  }
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-    String token = jwtAuthenticationProvider.resolveToken(request);
+    String token = jwtAuthenticationProvider.resolveToken(request, "Bearer");
 
     if(token != null && jwtAuthenticationProvider.validateToken(token)){
       Authentication authentication = jwtAuthenticationProvider.getAuthentication(token);
 
       SecurityContextHolder.getContext().setAuthentication(authentication);
     }
+
 
     filterChain.doFilter(request, response);
   }
