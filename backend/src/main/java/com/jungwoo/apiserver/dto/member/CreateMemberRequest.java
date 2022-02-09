@@ -1,4 +1,4 @@
-package com.jungwoo.apiserver.Dto.Member;
+package com.jungwoo.apiserver.dto.member;
 
 
 import lombok.AllArgsConstructor;

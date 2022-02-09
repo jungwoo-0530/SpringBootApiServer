@@ -26,14 +26,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
     String token = jwtAuthenticationProvider.resolveToken(request, "Bearer");
-
+    
     if(token != null && jwtAuthenticationProvider.validateToken(token)){
       Authentication authentication = jwtAuthenticationProvider.getAuthentication(token);
 
       SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
-
+    //필터체인. 여기까지 오지 않는다면 다음체인으로 가지 않음.
     filterChain.doFilter(request, response);
   }
 }
