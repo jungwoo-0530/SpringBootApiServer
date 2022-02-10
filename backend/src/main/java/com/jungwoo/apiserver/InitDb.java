@@ -39,7 +39,7 @@ public class InitDb {
     for(int i = 0; i<20; i++)
     {
       Post post = Post.builder().
-          title("제묵"+i).content("테스트입니다"+ i).type("qna").hit(0L).member(memberRepository.getById(0L)).build();
+          title("제묵"+i).content("테스트입니다"+ i).type("qna").hit(1L).member(memberRepository.getById(0L)).build();
       postService.saveWithMember(post,member);
     }
 

@@ -1,4 +1,7 @@
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
@@ -28,6 +31,5 @@ security:
     token:
       secretKey: secretkey
       expire: 1800000
-
-
+#      expire: 60000//1분
 

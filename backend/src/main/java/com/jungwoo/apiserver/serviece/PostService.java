@@ -11,7 +11,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 /**
  * fileName     : PostService
@@ -39,8 +41,9 @@ public class PostService {
 
 
   @Transactional
-  public void createPost(Post post) {
+  public Long createPost(Post post) {
     postRepository.save(post);
+    return post.getId();
   }
 
   @Transactional(readOnly = true)
@@ -48,7 +51,26 @@ public class PostService {
       return postRepository.findById(postId).orElseThrow(NoSuchElementException::new);
   }
 
-  public Post findByIdWithMember(Long postId) {
-    return postRepository.findByPostIdWithMember(postId).orElseThrow(NoSuchElementException::new);
+  public Optional<Post> findByIdWithMember(Long postId) {
+    return postRepository.findByPostIdWithMember(postId);
+  }
+
+  public List<Post> findAll() {
+    return postRepository.findAll();
+  }
+
+
+  @Transactional
+  public Post findPostDetail(Long postId) {
+
+    Optional<Post> optionalPost = postRepository.findByPostIdWithMember(postId);
+    if(!optionalPost.isPresent())
+    {
+      return null;
+    }
+
+    Post post = optionalPost.get();
+    post.plusViewNum(post.getHit());
+    return post;
   }
 }

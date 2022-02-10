@@ -31,5 +31,8 @@ public class Post extends BaseTimeEntity{
   private Member member;
 
 
+  public void plusViewNum(Long hit) {
+    this.hit = hit+1;
+  }
 
 }

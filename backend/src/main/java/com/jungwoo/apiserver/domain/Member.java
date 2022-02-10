@@ -29,10 +29,13 @@ public class Member extends BaseTimeEntity {
   private String role;
 
 
-  public void change(String password, String telephone, String email){
-    this.password = password;
+  public void change(String name, String telephone){
+    this.password = name;
     this.telephone = telephone;
-    this.email = email;
+  }
+
+  public void changePassword(String password) {
+    this.password = password;
   }
 
 

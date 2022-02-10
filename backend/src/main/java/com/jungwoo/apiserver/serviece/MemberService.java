@@ -33,12 +33,12 @@ public class MemberService {
   }
 
   @Transactional
-  public void save(Member member) {
+  public Long save(Member member) {
 
-    String encodedPassword  = passwordEncoder.encode(member.getPassword());
+    String encodedPassword = passwordEncoder.encode(member.getPassword());
     member.setPassword(encodedPassword);
-
     memberRepository.save(member);
+    return member.getId();
 
   }
 
@@ -50,5 +50,11 @@ public class MemberService {
   @Transactional(readOnly = true)
   public Member findByJwt(String token) {
     return memberRepository.findByLoginId(jwtAuthenticationProvider.getUserPk(token)).orElseThrow(NoSuchElementException::new);
+  }
+
+  @Transactional
+  public void updateMember(Member member) {
+    Member findMember = memberRepository.findByLoginId(member.getLoginId()).orElseThrow(NoSuchElementException::new);
+    findMember.change(member.getName(), member.getTelephone());
   }
 }

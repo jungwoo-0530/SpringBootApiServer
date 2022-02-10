@@ -45,6 +45,7 @@ public class JwtAuthenticationProvider {
     Claims claims = Jwts.claims().setSubject(userPk); // JWT payload 에 저장되는 정보단위
 //    claims.put("roles", roles); // 정보는 key / value 쌍으로 저장된다.
     Date now = new Date();
+
     return Jwts.builder()
         .setClaims(claims) // 정보 저장
         .setIssuedAt(now) // 토큰 발행 시간 정보
@@ -66,8 +67,16 @@ public class JwtAuthenticationProvider {
   }
 
   // 토큰의 만료기간 조회 분으로 환산 후.
-  public Long getTokenExpired(){
-    return tokenExpired/60000;
+//  public Long getTokenExpired(){
+////    return tokenExpired/60000;
+//    return tokenExpired;
+//  }
+  // 토큰의 만료기간 조회 분으로 환산 후.
+  public Date getTokenExpired(String token){
+//    return tokenExpired/60000;
+    Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+
+    return claims.getBody().getExpiration();
   }
 
   // 토큰에서 회원 정보 추출
@@ -96,6 +105,8 @@ public class JwtAuthenticationProvider {
   public boolean validateToken(String jwtToken) {
     try {
       Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
+      log.info(String.valueOf(claims.getBody().getExpiration()));
+      log.info(String.valueOf(new Date()));
       return !claims.getBody().getExpiration().before(new Date());
     } catch (SecurityException | MalformedJwtException e) {
       log.info("잘못된 JWT 서명입니다.");
