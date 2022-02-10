@@ -8,10 +8,7 @@ import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -109,19 +106,6 @@ public ResponseEntity<TokenResponse> login(@RequestBody loginRequest loginReq){
   @GetMapping("/auth")
   public Map<String, String> memberAuth(HttpServletRequest req){
 
-//    Cookie[] cookies = req.getCookies();
-//    for(Cookie a : cookies){
-//      System.out.println(a.getName() + " :" +a.getValue());
-//    }
-//    String authorization = req.getHeader("Co");
-//    String token = jwtAuthenticationProvider.resolveToken(req);
-//    String loginId = jwtAuthenticationProvider.getUserPk(token);//loginId 출력.
-//    String role = jwtAuthenticationProvider.getRole(token);
-//
-//    return AuthResponse.builder()
-//        .auth(role).build();
-//    return AuthResponse.builder()
-//        .auth(authorization).build();
     String a = jwtAuthenticationProvider.getRole(jwtAuthenticationProvider.resolveToken(req,"Bearer"));
     Map<String, String> map = new HashMap<>();
     map.put("role", a);
@@ -139,20 +123,6 @@ public ResponseEntity<TokenResponse> login(@RequestBody loginRequest loginReq){
 
 
 
-  @PostMapping("/test/auth")
-  private String getToken(HttpServletRequest request) {
-    log.info("testAuth");
-
-    String header = request.getHeader("Authorization");
-
-    log.info(header);
-
-    if (header != null && header.startsWith("Bearer ")) {
-      return header.replace("Bearer ","");
-    }
-
-    return null;
-  }
 
 
 }

@@ -50,12 +50,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
         .authorizeRequests()
         .antMatchers("/register","/login").permitAll()
-        .anyRequest().authenticated()
+        .anyRequest().authenticated()//permitAll을 제외한 것은 인증 시스템을 사용
         .and()
         .formLogin().disable()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     http.
         addFilterBefore(new JwtAuthenticationFilter(jwtAuthenticationProvider), UsernamePasswordAuthenticationFilter.class);
+    //UsernamePasswordAuthenticationFilter가 기본 인증 시스템. 저것 전 JwtAuthenticationFilter을 사용하겠다는 것.
 
 
   }
@@ -72,12 +73,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     return roleHierarchy;
   }
 
-
-//  @Override
-//  public void configure(WebSecurity web) throws Exception {
-//    web.ignoring()
-//        .antMatchers("/api/users/new");
-//  }
+//permitAll을 한다고 필터를 적용안하는 것이 아니라 응답은 정상적으로 감.
+  @Override
+  public void configure(WebSecurity web) throws Exception {
+    web.ignoring()
+        .antMatchers("/posts/qna");
+  }
 
   @Bean
   @Override

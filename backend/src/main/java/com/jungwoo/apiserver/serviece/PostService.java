@@ -1,5 +1,6 @@
 package com.jungwoo.apiserver.serviece;
 
+import com.jungwoo.apiserver.controller.PostController;
 import com.jungwoo.apiserver.domain.Member;
 import com.jungwoo.apiserver.domain.Post;
 import com.jungwoo.apiserver.dto.post.PostPageDto;
@@ -21,6 +22,7 @@ public class PostService {
 
   private final PostRepository postRepository;
 
+  //db초기화용.
   @Transactional
   public void saveWithMember(Post post, Member member){
 
@@ -31,5 +33,11 @@ public class PostService {
   @Transactional(readOnly = true)
   public Page<PostPageDto> findPageSort(String postType, Pageable pageable) {
     return postRepository.findAllPageSort(postType, pageable);
+  }
+
+
+  @Transactional
+  public void createPost(Post post) {
+    postRepository.save(post);
   }
 }

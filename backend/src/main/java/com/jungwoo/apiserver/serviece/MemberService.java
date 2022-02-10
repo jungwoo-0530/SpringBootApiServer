@@ -2,11 +2,13 @@ package com.jungwoo.apiserver.serviece;
 
 import com.jungwoo.apiserver.domain.Member;
 import com.jungwoo.apiserver.repository.MemberRepository;
+import com.jungwoo.apiserver.security.jwt.JwtAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 /**
  * fileName     : MemberService
@@ -18,6 +20,7 @@ import java.util.Optional;
 public class MemberService {
 
   private final MemberRepository memberRepository;
+  private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
   private final PasswordEncoder passwordEncoder;
 
@@ -42,5 +45,10 @@ public class MemberService {
   @Transactional(readOnly = true)
   public Optional<Member> findByLoginId(String loginId) {
     return memberRepository.findByLoginId(loginId);
+  }
+
+  @Transactional(readOnly = true)
+  public Member findByJwt(String token) {
+    return memberRepository.findByLoginId(jwtAuthenticationProvider.getUserPk(token)).orElseThrow(NoSuchElementException::new);
   }
 }
