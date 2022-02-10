@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
+
 /**
  * fileName     : PostService
  * author       : jungwoo
@@ -39,5 +41,14 @@ public class PostService {
   @Transactional
   public void createPost(Post post) {
     postRepository.save(post);
+  }
+
+  @Transactional(readOnly = true)
+  public Post findById(Long postId) {
+      return postRepository.findById(postId).orElseThrow(NoSuchElementException::new);
+  }
+
+  public Post findByIdWithMember(Long postId) {
+    return postRepository.findByPostIdWithMember(postId).orElseThrow(NoSuchElementException::new);
   }
 }

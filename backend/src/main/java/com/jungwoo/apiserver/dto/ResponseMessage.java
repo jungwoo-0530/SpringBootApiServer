@@ -17,4 +17,6 @@ public class ResponseMessage {
   public static final String DB_ERROR = "데이터베이스 에러";
   public static final String CREATE_POST = "글 생성 성공";
   public static final String CREATE_POST_FAIL = "글 생성 실패";
+  public static final String READ_POST = "글 조회 성공";
+
 }
