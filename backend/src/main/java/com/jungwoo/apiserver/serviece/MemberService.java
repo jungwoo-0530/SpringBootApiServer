@@ -48,7 +48,7 @@ public class MemberService {
   }
 
   @Transactional(readOnly = true)
-  public Member findByJwt(String token) {
+  public Member getMemberByJwt(String token) {
     return memberRepository.findByLoginId(jwtAuthenticationProvider.getUserPk(token)).orElseThrow(NoSuchElementException::new);
   }
 

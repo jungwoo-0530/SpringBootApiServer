@@ -47,25 +47,24 @@ public class PostService {
   }
 
   @Transactional(readOnly = true)
-  public Post findById(Long postId) {
+  public Post getPostById(Long postId) {
       return postRepository.findById(postId).orElseThrow(NoSuchElementException::new);
   }
 
-  public Optional<Post> findByIdWithMember(Long postId) {
+  public Optional<Post> getPostWithMemberById(Long postId) {
     return postRepository.findByPostIdWithMember(postId);
   }
 
-  public List<Post> findAll() {
+  public List<Post> getPostsAll() {
     return postRepository.findAll();
   }
 
 
   @Transactional
-  public Post findPostDetail(Long postId) {
+  public Post getPostDetail(Long postId) {
 
     Optional<Post> optionalPost = postRepository.findByPostIdWithMember(postId);
-    if(!optionalPost.isPresent())
-    {
+    if(!optionalPost.isPresent()) {
       return null;
     }
 

@@ -1,6 +1,5 @@
 package com.jungwoo.apiserver.controller;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jungwoo.apiserver.dto.BasicResponse;
 import com.jungwoo.apiserver.dto.CommonResponse;
 import com.jungwoo.apiserver.dto.ErrorResponse;
@@ -8,9 +7,6 @@ import com.jungwoo.apiserver.dto.member.CreateMemberRequest;
 import com.jungwoo.apiserver.domain.Member;
 import com.jungwoo.apiserver.security.jwt.JwtAuthenticationProvider;
 import com.jungwoo.apiserver.serviece.MemberService;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.*;
@@ -21,11 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -84,11 +76,11 @@ public class MemberController {
           body(new ErrorResponse("가입되지 않은 LoginId입니다."));
     }
     Member member = optionalMember.get();
-    if (!passwordEncoder.matches(loginReq.getPassword(), member.getPassword())) {
+    if (! passwordEncoder.matches(loginReq.getPassword(), member.getPassword())) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).
           body(new ErrorResponse("비밀번호가 일치하지 않습니다."));
     }
-
+    log.info("{}", memberService.getClass());
     String token = jwtAuthenticationProvider.createToken(member.getLoginId());
     Date date = jwtAuthenticationProvider.getTokenExpired(token);
     return ResponseEntity.ok().body(new CommonResponse<>(TokenResponse.builder().
@@ -113,12 +105,19 @@ public class MemberController {
     private String password;
   }
 
+  @PostMapping("/logout")
+  public ResponseEntity<? extends BasicResponse> logout() {
+
+    return ResponseEntity.ok().body(new CommonResponse<>("로그아웃에 성공했습니다."));
+  }
+
+
   //  request 헤더에 있는 JWT 토큰값으로 해당하는 사용자.
 //  즉, 현재 로그인한 사용자의 정보(loginId, role)을 가져올 수 있음.
 //  ResponseEntity<>로 응답하기.
   @GetMapping("/auth")
   public ResponseEntity<? extends BasicResponse> getRoleAndLoingId(HttpServletRequest req) {
-    String token = jwtAuthenticationProvider.resolveToken(req, "Bearer");
+    String token = jwtAuthenticationProvider.getTokenInRequestHeader(req, "Bearer");
     String role = jwtAuthenticationProvider.getRole(token);
     String loginId = jwtAuthenticationProvider.getUserPk(token);
     return ResponseEntity.ok().body(new CommonResponse<>(AuthResponse.builder().
@@ -138,8 +137,8 @@ public class MemberController {
   public ResponseEntity<? extends BasicResponse> memberDetail(HttpServletRequest request) {
     log.info("memberDetail in MemberController");
 
-    String token = jwtAuthenticationProvider.resolveToken(request, "Bearer");
-    Member member = memberService.findByJwt(token);
+    String token = jwtAuthenticationProvider.getTokenInRequestHeader(request, "Bearer");
+    Member member = memberService.getMemberByJwt(token);
 
 
     return ResponseEntity.ok().body(new CommonResponse<>(MemberDto.builder().loginId(member.getLoginId()).
@@ -175,9 +174,5 @@ public class MemberController {
   }
 
 
-  @PostMapping("/logout")
-  public ResponseEntity<? extends BasicResponse> logout() {
 
-    return ResponseEntity.ok().body(new CommonResponse<>("로그아웃에 성공했습니다."));
-  }
 }

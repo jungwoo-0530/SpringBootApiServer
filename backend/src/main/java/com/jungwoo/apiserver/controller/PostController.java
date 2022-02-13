@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.ZonedDateTime;
-import java.util.Optional;
 
 /**
  * fileName     : PostController
@@ -49,6 +48,7 @@ public class PostController {
                                     @PageableDefault(size = 4, sort = "id",
                                         direction = Sort.Direction.DESC) Pageable pageable) {
     log.info("PostController getmapping list");
+    log.info("{}", memberService.getClass());
 
 
     return postService.findPageSort(type, pageable);
@@ -61,7 +61,7 @@ public class PostController {
                                            @RequestBody PostDto postDto,
                                            HttpServletRequest request) {
 
-    Member member = memberService.findByJwt(jwtAuthenticationProvider.resolveToken(request, "Bearer"));
+    Member member = memberService.getMemberByJwt(jwtAuthenticationProvider.getTokenInRequestHeader(request, "Bearer"));
     Post post = Post.builder().
         title(postDto.title).
         content(postDto.content).
@@ -88,7 +88,7 @@ public class PostController {
   public ResponseEntity<? extends BasicResponse> readPost(@PathVariable(name = "postId") Long postId,
                                           @PathVariable(name = "postType") String postType) {
 
-    Post post = postService.findPostDetail(postId);
+    Post post = postService.getPostDetail(postId);
 
     if (post == null) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND)
