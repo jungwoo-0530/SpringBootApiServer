@@ -68,7 +68,8 @@ public class BoardService {
     }
 
     Board board = optionalBoard.get();
-    board.plusViewNum(board.getHit());
+//    board.plusViewNum(board.getHit());
+    boardRepository.plusBoardHit(boardId);
     return board;
   }
 

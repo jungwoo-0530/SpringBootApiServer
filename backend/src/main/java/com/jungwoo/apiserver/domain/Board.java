@@ -1,7 +1,6 @@
 package com.jungwoo.apiserver.domain;
 
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -25,7 +24,7 @@ public class Board extends BaseTimeEntity{
   private String title;
   private String content;
   private String type;
-  private Long hit;
+  private Integer hit;
 
   private boolean available;
 
@@ -35,7 +34,7 @@ public class Board extends BaseTimeEntity{
 
 
 
-  public void plusViewNum(Long hit) {
+  public void plusViewNum(Integer hit) {
     this.hit = hit+1;
   }
 
@@ -47,12 +46,5 @@ public class Board extends BaseTimeEntity{
   public void changeAvailableBoard(boolean flag){
     this.available = flag;
   }
-
-
-//
-//  @PrePersist
-//  public void prePersist(){
-//    this.available = true;
-//  }
 
 }

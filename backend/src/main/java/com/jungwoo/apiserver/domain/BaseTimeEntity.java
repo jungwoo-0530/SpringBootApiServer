@@ -3,6 +3,7 @@ package com.jungwoo.apiserver.domain;
 import lombok.Getter;
 
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PostUpdate;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import java.time.ZonedDateTime;
@@ -13,7 +14,7 @@ import java.time.ZonedDateTime;
  */
 @Getter
 @MappedSuperclass
-public class BaseTimeEntity {
+public abstract class BaseTimeEntity {
 
   private ZonedDateTime createDate;
   private ZonedDateTime updateDate;
@@ -25,7 +26,7 @@ public class BaseTimeEntity {
   }
 
   @PreUpdate
-  public void preUpdate() {
+  public void postUpdate() {
     this.updateDate = ZonedDateTime.now();
   }
 

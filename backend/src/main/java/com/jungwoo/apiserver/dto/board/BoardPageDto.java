@@ -23,14 +23,14 @@ public class BoardPageDto {
   private String author;
   private String content;
   private String type;
-  private Long hit;
+  private Integer hit;
   private boolean available;
   private ZonedDateTime createDate;
   private ZonedDateTime updateDate;
 
 
   @QueryProjection
-  public BoardPageDto(Long id, String title, String author, String content, String type, Long hit, boolean available, ZonedDateTime createDate, ZonedDateTime updateDate) {
+  public BoardPageDto(Long id, String title, String author, String content, String type, Integer hit, boolean available, ZonedDateTime createDate, ZonedDateTime updateDate) {
     this.id = id;
     this.title = title;
     this.author = author;

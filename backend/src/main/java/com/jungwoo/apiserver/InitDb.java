@@ -32,15 +32,20 @@ public class InitDb {
   @Transactional
   public void init(){
 
-    Member member = Member.builder().loginId("aa").password("aa").email("am7227@naver.com")
+    Member admin = Member.builder().loginId("aa").password("aa").email("admin@naver.com")
         .role("admin").name("김정우").telephone("010-8541-9497").build();
+    memberService.save(admin);
+
+    Member member = Member.builder().loginId("bb").password("bb").email("member@naver.com")
+        .role("member").name("김선우").telephone("010-8541-9497").build();
+
     memberService.save(member);
 
     for(int i = 0; i<20; i++)
     {
       Board board = Board.builder().
-          title("제묵"+i).content("테스트입니다"+ i).type("qna").hit(1L).member(memberRepository.getById(0L)).available(true).build();
-      boardService.saveWithMember(board,member);
+          title("제묵"+i).content("테스트입니다"+ i).type("qna").hit(1).member(memberRepository.getById(0L)).available(true).build();
+      boardService.saveWithMember(board,admin);
     }
 
     log.info("DB INIT PASS");

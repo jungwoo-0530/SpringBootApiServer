@@ -11,7 +11,8 @@ import java.io.Serializable;
 /**
  * fileName     : JwtAuthenticationEntryPoint
  * author       : jungwoo
- * description  : 인증에 실패한 사용자의 response에 HttpServletResponse.SC_UNAUTHORIZED를 담아줌, 401 에러
+ * description  : (비로그인)상태, 인증에 실패한 사용자의 response에 HttpServletResponse.SC_UNAUTHORIZED를 담아줌, 401 에러
+ *                즉, 토큰 인증 자체가 안되는 경우.
  */
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Serializable {
@@ -22,6 +23,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Se
   public void commence(HttpServletRequest request, HttpServletResponse response,
                        AuthenticationException authException) throws IOException {
 
-    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+//    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "토큰 인증 실패");
+    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED, "토큰 인증 실패");
   }
 }

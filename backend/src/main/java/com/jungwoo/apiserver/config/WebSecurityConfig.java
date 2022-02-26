@@ -53,8 +53,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .accessDeniedHandler(jwtAccessDeniedHandler)
         .and()
         .authorizeRequests()
+        .antMatchers(HttpMethod.GET, "/boards/{boardId}").authenticated()
+        .antMatchers(HttpMethod.POST, "/boards/notification").hasRole("admin")
+        .antMatchers(HttpMethod.POST, "/boards/qna").authenticated()
+        .regexMatchers(HttpMethod.GET, "\\/boards\\?boardType=(&.*|$)").permitAll()// /boards?boardType=qna&page=0 ...
         .antMatchers("/register","/login").permitAll()
-        .anyRequest().authenticated()//permitAll을 제외한 것은 인증 시스템을 사용
+        .antMatchers(HttpMethod.DELETE, "/boards/{boardId}").authenticated()
         .and()
         .formLogin().disable()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -70,6 +74,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     auth.userDetailsService(customUserDetailService).passwordEncoder(passwordEncoder());
   }
 
+
+
   @Bean
   RoleHierarchy roleHierarchy(){
     RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
@@ -78,10 +84,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
 //permitAll을 한다고 필터를 적용안하는 것이 아니라 응답은 정상적으로 감.
+  //위에서 설정한 configure보다 우선순위가 높음.
   @Override
   public void configure(WebSecurity web) throws Exception {
     web.ignoring()
-        .antMatchers("/boards/**","/swagger-ui/index", "/test/qna", "/posts/**");
+        .antMatchers("/swagger-ui/index", "/test/qna");
     web.ignoring().mvcMatchers(HttpMethod.OPTIONS, "/**");
     web.ignoring().mvcMatchers("/swagger-ui.html/**", "/configuration/**", "/swagger-resources/**", "/v3/api-docs","/webjars/**",
         "/swagger-ui", "/swagger-ui/**");

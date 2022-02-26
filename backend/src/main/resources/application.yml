@@ -27,7 +27,6 @@ spring:
 logging.level:
   org.hibernate.type: trace
 
-
 security:
   jwt:
     token:

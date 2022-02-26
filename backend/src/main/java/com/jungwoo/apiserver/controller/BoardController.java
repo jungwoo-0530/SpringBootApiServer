@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,10 +22,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.ZonedDateTime;
+import java.util.Collection;
+import java.util.Locale;
 
 /**
  * fileName     : BoardController
@@ -45,8 +50,8 @@ public class BoardController {
   @ApiImplicitParam(name = "type", value = "게시글 카테고리", dataType = "String")
   @GetMapping("/boards")
   public Page<BoardPageDto> listBoard(@RequestParam(value = "boardType") String boardType,
-                                     @PageableDefault(size = 10, sort = "id",
-                                        direction = Sort.Direction.DESC) Pageable pageable) {
+                                      @PageableDefault(size = 10, sort = "id",
+                                          direction = Sort.Direction.DESC) Pageable pageable) {
     log.info("BoardController getmapping list");
     log.info("{}", memberService.getClass());
 
@@ -100,31 +105,20 @@ public class BoardController {
   }
 
 
-
-
-
-
-
-
-
   @ApiOperation(value = "게시글을 생성하는 메소드")
   @ApiImplicitParam(name = "boardType", value = "게시글 카테고리")
   @PostMapping("/boards/{boardType}")
   public ResponseEntity<? extends BasicResponse> createBoard(@PathVariable(name = "boardType") String type,
-                                           @RequestBody BoardDto boardDto,
-                                           HttpServletRequest request) {
-//<Route path="/posts/update" component={PostUpdateForm}/>
-//              <Route path="/posts/write" component={PostNewForm}/>{/* put */}
-//        <Route path="/posts/:id" component={PostShow}/>
-//              <Route path="/qna" component={PostIndex} />
-//              <Route path="/notice" component={PostIndex} />
+                                                             @RequestBody BoardDto boardDto,
+                                                             HttpServletRequest request) {
+
     Member member = memberService.getMemberByJwt(jwtAuthenticationProvider.getTokenInRequestHeader(request, "Bearer"));
     Board board = Board.builder().
         title(boardDto.title).
         content(boardDto.content).
         member(member).
         type(type).
-        hit(1L).
+        hit(1).
         available(true).
         build();
 
@@ -135,9 +129,6 @@ public class BoardController {
 
     return ResponseEntity.status(201).body(new CommonResponse<>(id, "게시물을 생성했습니다."));
   }
-
-
-
 
 
   @DeleteMapping("/boards/{boardId}")
@@ -152,7 +143,7 @@ public class BoardController {
 
   @PutMapping("/boards/{boardId}")
   public ResponseEntity<? extends BasicResponse> updateBoard(@PathVariable(name = "boardId") Long boardId,
-                                                            @RequestBody BoardDto boardDto){
+                                                             @RequestBody BoardDto boardDto) {
 
     log.info("BoardController updateBoard");
 
@@ -167,6 +158,24 @@ public class BoardController {
   }
 
 
+//  @GetMapping("/auth")
+//  public ResponseEntity<? extends BasicResponse> authMember(HttpServletRequest req) {
+//    String token = jwtAuthenticationProvider.getTokenInRequestHeader(req, "Bearer");
+//
+//    AuthDto authDto = AuthDto.builder().
+//        role(jwtAuthenticationProvider.getRole(token)).
+//        loginId(jwtAuthenticationProvider.getUserPk(token)).build();
+//
+//    return ResponseEntity.ok().body(new CommonResponse<>(authDto, "성공적으로 role, loginId를 반환했습니다."));
+//  }
+//
+//  @Getter
+//  @Builder
+//  private static class AuthDto{
+//    Long id;
+//    String role;
+//    String loginId;
+//  }
 
 
 
