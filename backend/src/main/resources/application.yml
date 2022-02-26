@@ -12,12 +12,14 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
-    database-platform: org.hibernate.dialect.MariaDB106Dialect
+#    database-platform: org.hibernate.dialect.MariaDB106Dialect
+
 
 
     open-in-view: true
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.MariaDB106Dialect
         format_sql: true
         show_sql: true
 

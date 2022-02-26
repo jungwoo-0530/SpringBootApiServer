@@ -1,6 +1,6 @@
 package com.jungwoo.apiserver.repository;
 
-import com.jungwoo.apiserver.dto.post.PostPageDto;
+import com.jungwoo.apiserver.dto.board.BoardPageDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
  * author       : jungwoo
  * description  :
  */
-public interface PostRepositoryCustom {
-  Page<PostPageDto> findAllPageSort(String postType, Pageable pageable);
+public interface BoardRepositoryCustom {
+  Page<BoardPageDto> findAllPageSort(String boardType, Pageable pageable);
 
 }

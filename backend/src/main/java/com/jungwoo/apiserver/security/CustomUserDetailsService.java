@@ -24,12 +24,17 @@ public class CustomUserDetailsService implements UserDetailsService {
   private final MemberRepository memberRepository;
 
   public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
-    Member member = (Member)memberRepository.findByLoginId(loginId).orElseThrow(() -> {
-      return new UsernameNotFoundException("not found loginId : " + loginId);
-    });
+
+    Member member = getMember(loginId);
+
     List<GrantedAuthority> authorities = new ArrayList<>();
     authorities.add(new SimpleGrantedAuthority("ROLE_" + member.getRole()));
+
     return new CustomUserDetails(member, authorities);
+  }
+
+  private Member getMember(String loginId) {
+    return (Member)memberRepository.findByLoginId(loginId).orElseThrow(() -> new UsernameNotFoundException("not found loginId : " + loginId));
   }
 
 

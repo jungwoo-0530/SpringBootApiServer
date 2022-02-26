@@ -1,4 +1,4 @@
-package com.jungwoo.apiserver.dto.post;
+package com.jungwoo.apiserver.dto.board;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.Setter;
 import java.time.ZonedDateTime;
 
 /**
- * fileName     : PostPageDto
+ * fileName     : BoardPageDto
  * author       : jungwoo
  * description  :
  */
@@ -17,25 +17,27 @@ import java.time.ZonedDateTime;
 @Getter
 @Setter
 @Builder
-public class PostPageDto {
+public class BoardPageDto {
   private Long id;
   private String title;
   private String author;
   private String content;
   private String type;
   private Long hit;
+  private boolean available;
   private ZonedDateTime createDate;
   private ZonedDateTime updateDate;
 
 
   @QueryProjection
-  public PostPageDto(Long id, String title, String author, String content, String type, Long hit, ZonedDateTime createDate, ZonedDateTime updateDate) {
+  public BoardPageDto(Long id, String title, String author, String content, String type, Long hit, boolean available, ZonedDateTime createDate, ZonedDateTime updateDate) {
     this.id = id;
     this.title = title;
     this.author = author;
     this.content = content;
     this.type = type;
     this.hit = hit;
+    this.available = available;
     this.createDate = createDate;
     this.updateDate = updateDate;
 

@@ -1,7 +1,6 @@
 package com.jungwoo.apiserver.repository;
 
-import com.jungwoo.apiserver.domain.Post;
-import jdk.nashorn.internal.ir.Optimistic;
+import com.jungwoo.apiserver.domain.Board;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,14 +9,14 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 /**
- * fileName     : PostRepository
+ * fileName     : BoardRepository
  * author       : jungwoo
  * description  :
  */
 @Repository
-public interface PostRepository extends JpaRepository<Post, Long>,PostRepositoryCustom {
+public interface BoardRepository extends JpaRepository<Board, Long>, BoardRepositoryCustom {
 
 
-  @Query("select p from Post p left join fetch p.member where p.id = :id")
-  Optional<Post> findByPostIdWithMember(@Param("id") Long postId);
+  @Query("select b from Board b left join fetch b.member where b.id = :id")
+  Optional<Board> findByBoardIdWithMember(@Param("id") Long boardId);
 }

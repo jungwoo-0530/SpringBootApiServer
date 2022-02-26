@@ -38,6 +38,7 @@ public class MemberController {
   @ApiOperation(value = "회원가입하는 메소드")
   @PostMapping("/register")
   public ResponseEntity<? extends BasicResponse> registerMember(@RequestBody CreateMemberRequest createMemberRequest) {
+
     if (memberService.dupLoginIdCheck(createMemberRequest.getLoginId())) {
       return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse("이미 사용 중인 아이디입니다."));
     } else if (memberService.dupEmailCheck(createMemberRequest.getEmail())) {
@@ -81,8 +82,10 @@ public class MemberController {
           body(new ErrorResponse("비밀번호가 일치하지 않습니다."));
     }
     log.info("{}", memberService.getClass());
+
     String token = jwtAuthenticationProvider.createToken(member.getLoginId());
     Date date = jwtAuthenticationProvider.getTokenExpired(token);
+
     return ResponseEntity.ok().body(new CommonResponse<>(TokenResponse.builder().
         accessToken(token).
         tokenExpired(date).

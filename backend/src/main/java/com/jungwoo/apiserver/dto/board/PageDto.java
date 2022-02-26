@@ -1,4 +1,4 @@
-//package com.jungwoo.apiserver.dto.post;
+//package com.jungwoo.apiserver.dto.board;
 //
 //import lombok.Data;
 //import org.springframework.data.domain.Pageable;
