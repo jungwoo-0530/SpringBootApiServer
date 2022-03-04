@@ -86,6 +86,7 @@ public class BoardController {
         createTime(board.getCreateDate()).
         build();
 
+
     return ResponseEntity.ok().body(new CommonResponse<>(boardDto, "게시물을 불러왔습니다."));
 
   }
@@ -157,25 +158,6 @@ public class BoardController {
     return ResponseEntity.ok().body(new CommonResponse<>("게시물을 수정했습니다."));
   }
 
-
-//  @GetMapping("/auth")
-//  public ResponseEntity<? extends BasicResponse> authMember(HttpServletRequest req) {
-//    String token = jwtAuthenticationProvider.getTokenInRequestHeader(req, "Bearer");
-//
-//    AuthDto authDto = AuthDto.builder().
-//        role(jwtAuthenticationProvider.getRole(token)).
-//        loginId(jwtAuthenticationProvider.getUserPk(token)).build();
-//
-//    return ResponseEntity.ok().body(new CommonResponse<>(authDto, "성공적으로 role, loginId를 반환했습니다."));
-//  }
-//
-//  @Getter
-//  @Builder
-//  private static class AuthDto{
-//    Long id;
-//    String role;
-//    String loginId;
-//  }
 
 
 
