@@ -15,9 +15,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Date;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -77,7 +84,7 @@ public class MemberController {
           body(new ErrorResponse("가입되지 않은 LoginId입니다."));
     }
     Member member = optionalMember.get();
-    if (! passwordEncoder.matches(loginReq.getPassword(), member.getPassword())) {
+    if (!passwordEncoder.matches(loginReq.getPassword(), member.getPassword())) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).
           body(new ErrorResponse("비밀번호가 일치하지 않습니다."));
     }
@@ -176,6 +183,52 @@ public class MemberController {
     return ResponseEntity.ok().body(new CommonResponse<>("회원 업데이트를 성공했습니다."));
   }
 
+
+//  @SneakyThrows
+//  @PostMapping("/test/image/upload")
+//  public ResponseEntity<? extends BasicResponse> imageUploadTest(@RequestPart(value = "file", required = false) MultipartFile file,
+//                                                                 @RequestPart(value = "dto") ImageDto imageDto ) throws IOException {
+//    String originalFilename = file.getOriginalFilename();
+//    File dest = new File("/Users/jungwoo/Desktop/dev/SpringBootApiServer/backend/src/main/resources/img/" +
+//        originalFilename);
+//    try {
+//      file.transferTo(dest);
+//    } catch (IOException | IllegalStateException e) {
+//      e.printStackTrace();
+//    }
+//
+//    return ResponseEntity.ok().body(new CommonResponse<>("이미지 업로드 완료했습니다."));
+//
+//  }
+//  @SneakyThrows
+//  @PostMapping("/image/upload")
+//  public ImageDto imageUploadTest(MultipartHttpServletRequest multipartReq) throws IOException {
+//
+//    log.info("===========imageUploadTest===========================");
+//
+//    MultipartFile file = multipartReq.getFile("upload");
+//    String originalFilename = file.getOriginalFilename();
+//    File dest = new File("/Users/jungwoo/Desktop/dev/SpringBootApiServer/frontend/public/img/boardImage/" +
+//        originalFilename);
+//
+//
+//    file.transferTo(dest);
+//
+//    String url = "/img/boardImage/"+originalFilename;
+//
+//
+//
+//    return ImageDto.builder().uploaded(true).url(url).build();
+//
+//  }
+//
+//  @Getter
+//  @Builder
+//  public static class ImageDto {
+//
+//    boolean uploaded;
+//    String url;
+//  }
 
 
 }

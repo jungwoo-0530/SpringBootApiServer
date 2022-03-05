@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -24,10 +25,11 @@ import java.util.Optional;
 public class BoardService {
 
   private final BoardRepository boardRepository;
+  private final ImageTraceService imageTraceService;
 
   //db초기화용.
   @Transactional
-  public void saveWithMember(Board board, Member member){
+  public void saveWithMember(Board board, Member member) {
 
     board.setMember(member);
     boardRepository.save(board);
@@ -40,14 +42,18 @@ public class BoardService {
 
 
   @Transactional
-  public Long createBoard(Board board) {
+  public Long createBoard(Board board) throws IOException {
+
     boardRepository.save(board);
+
+    imageTraceService.permanentSaveImage(board.getMember().getLoginId(), board);
+
     return board.getId();
   }
 
   @Transactional(readOnly = true)
   public Board getBoardById(Long boardId) {
-      return boardRepository.findById(boardId).orElseThrow(NoSuchElementException::new);
+    return boardRepository.findById(boardId).orElseThrow(NoSuchElementException::new);
   }
 
   public Optional<Board> getBoardWithMemberById(Long boardId) {
@@ -63,7 +69,7 @@ public class BoardService {
   public Board getBoardDetail(Long boardId) {
 
     Optional<Board> optionalBoard = boardRepository.findByBoardIdWithMember(boardId);
-    if(!optionalBoard.isPresent()) {
+    if (!optionalBoard.isPresent()) {
       return null;
     }
 

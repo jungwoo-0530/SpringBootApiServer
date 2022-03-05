@@ -5,6 +5,7 @@ import com.jungwoo.apiserver.domain.Member;
 import com.jungwoo.apiserver.dto.*;
 import com.jungwoo.apiserver.dto.board.BoardPageDto;
 import com.jungwoo.apiserver.security.jwt.JwtAuthenticationProvider;
+import com.jungwoo.apiserver.serviece.ImageTraceService;
 import com.jungwoo.apiserver.serviece.MemberService;
 import com.jungwoo.apiserver.serviece.BoardService;
 import io.swagger.annotations.Api;
@@ -12,9 +13,9 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,14 +23,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.Collection;
-import java.util.Locale;
 
 /**
  * fileName     : BoardController
@@ -45,6 +43,7 @@ public class BoardController {
   private final BoardService boardService;
   private final JwtAuthenticationProvider jwtAuthenticationProvider;
   private final MemberService memberService;
+  private final ImageTraceService imageTraceService;
 
   @ApiOperation(value = "카테고리에 맞는 게시글 목록을 반환하는 메소드")
   @ApiImplicitParam(name = "type", value = "게시글 카테고리", dataType = "String")
@@ -73,6 +72,7 @@ public class BoardController {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).
           body(new ErrorResponse("해당 게시물이 존재하지 않습니다"));
     }
+
 
 
     BoardDto boardDto = BoardDto.builder().
@@ -106,12 +106,13 @@ public class BoardController {
   }
 
 
+  @SneakyThrows
   @ApiOperation(value = "게시글을 생성하는 메소드")
   @ApiImplicitParam(name = "boardType", value = "게시글 카테고리")
   @PostMapping("/boards/{boardType}")
   public ResponseEntity<? extends BasicResponse> createBoard(@PathVariable(name = "boardType") String type,
                                                              @RequestBody BoardDto boardDto,
-                                                             HttpServletRequest request) {
+                                                             HttpServletRequest request) throws IOException {
 
     Member member = memberService.getMemberByJwt(jwtAuthenticationProvider.getTokenInRequestHeader(request, "Bearer"));
     Board board = Board.builder().
@@ -123,7 +124,13 @@ public class BoardController {
         available(true).
         build();
 
-    Long id = boardService.createBoard(board);
+
+    Long id = null;
+    try {
+      id = boardService.createBoard(board);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
     if (id == null) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("게시물 생성하지 못하였습니다."));
     }

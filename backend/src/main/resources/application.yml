@@ -23,6 +23,13 @@ spring:
         format_sql: true
         show_sql: true
 
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+      location: /Users/jungwoo/Desktop/dev/SpringBootApiServer/backend/src/main/resources/img
+      file-size-threshold: 1MB
+
 
 logging.level:
   org.hibernate.type: trace
@@ -33,4 +40,5 @@ security:
       secretKey: secretkey
       expire: 1800000
 #      expire: 60000//1분
+
 
