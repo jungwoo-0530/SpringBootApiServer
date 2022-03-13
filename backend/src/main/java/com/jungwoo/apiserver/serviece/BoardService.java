@@ -25,7 +25,7 @@ import java.util.Optional;
 public class BoardService {
 
   private final BoardRepository boardRepository;
-  private final ImageTraceService imageTraceService;
+  private final ImageUtilService imageUtilService;
 
   //db초기화용.
   @Transactional
@@ -46,7 +46,8 @@ public class BoardService {
 
     boardRepository.save(board);
 
-    imageTraceService.permanentSaveImage(board.getMember().getLoginId(), board);
+    imageUtilService.permanentSaveImage(board.getMember().getLoginId(), board);
+
 
     return board.getId();
   }

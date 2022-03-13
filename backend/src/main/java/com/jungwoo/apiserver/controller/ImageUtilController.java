@@ -1,10 +1,11 @@
 package com.jungwoo.apiserver.controller;
 
-import com.jungwoo.apiserver.domain.ImageTrace;
+import com.jungwoo.apiserver.domain.ImageUtil;
 import com.jungwoo.apiserver.dto.BasicResponse;
 import com.jungwoo.apiserver.dto.CommonResponse;
+import com.jungwoo.apiserver.dto.ErrorResponse;
 import com.jungwoo.apiserver.security.jwt.JwtAuthenticationProvider;
-import com.jungwoo.apiserver.serviece.ImageTraceService;
+import com.jungwoo.apiserver.serviece.ImageUtilService;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -29,9 +30,9 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-public class ImageTraceController {
+public class ImageUtilController {
 
-  private final ImageTraceService imageTraceService;
+  private final ImageUtilService imageUtilService;
   private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
 
@@ -44,6 +45,11 @@ public class ImageTraceController {
 
     MultipartFile file = multipartReq.getFile("upload");
 
+
+    //image resize
+    file = imageUtilService.resizeImage(file, 600);
+
+
     String userId = jwtAuthenticationProvider.getUserPk(
         jwtAuthenticationProvider.getTokenInRequestHeader(multipartReq, "Bearer"));
 
@@ -53,7 +59,7 @@ public class ImageTraceController {
     UUID uu = UUID.randomUUID();
     String newUUID = uu + fileOriginalName;
     String path = "/img/tempImage/" + newUUID;
-    ImageTrace temp = ImageTrace.builder().
+    ImageUtil temp = ImageUtil.builder().
         fileName(fileOriginalName).
         useFlag(false).
         fileUUID(newUUID).
@@ -63,7 +69,7 @@ public class ImageTraceController {
         build();
 
 
-    imageTraceService.temporarySave(temp);
+    imageUtilService.temporarySave(temp);
 
 
     File dest = new File(TempImageAbsolutePath + newUUID);
@@ -84,13 +90,17 @@ public class ImageTraceController {
   }
 
 
+
   @PostMapping("/image/delete")
   public ResponseEntity<? extends BasicResponse> deleteTempImage(HttpServletRequest request) {
 
     String loginId = jwtAuthenticationProvider.getUserPk(jwtAuthenticationProvider.getTokenInRequestHeader(request,"Bearer"));
 
-    imageTraceService.deleteTempImageByLoginId(loginId);
+    if(imageUtilService.deleteTempImageByLoginId(loginId)){
+      return ResponseEntity.status(201).body(new CommonResponse<>(loginId, "임시 이미지 삭제 완료"));
+    }else{
+      return ResponseEntity.status(204).body(new ErrorResponse("이미지 삭제 실패했습니다."));
+    }
 
-    return ResponseEntity.status(201).body(new CommonResponse<>(loginId, "임시 이미지 삭제 완료"));
   }
 }

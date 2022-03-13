@@ -15,11 +15,11 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ImageTrace extends BaseTimeEntity{
+public class ImageUtil extends BaseTimeEntity{
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "IMAGETRACE_ID")
+  @Column(name = "IMAGEUTIL_ID")
   private Long id;
 
   private boolean useFlag;

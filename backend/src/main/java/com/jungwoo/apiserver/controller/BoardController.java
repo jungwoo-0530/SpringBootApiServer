@@ -5,7 +5,7 @@ import com.jungwoo.apiserver.domain.Member;
 import com.jungwoo.apiserver.dto.*;
 import com.jungwoo.apiserver.dto.board.BoardPageDto;
 import com.jungwoo.apiserver.security.jwt.JwtAuthenticationProvider;
-import com.jungwoo.apiserver.serviece.ImageTraceService;
+import com.jungwoo.apiserver.serviece.ImageUtilService;
 import com.jungwoo.apiserver.serviece.MemberService;
 import com.jungwoo.apiserver.serviece.BoardService;
 import io.swagger.annotations.Api;
@@ -43,7 +43,7 @@ public class BoardController {
   private final BoardService boardService;
   private final JwtAuthenticationProvider jwtAuthenticationProvider;
   private final MemberService memberService;
-  private final ImageTraceService imageTraceService;
+  private final ImageUtilService imageUtilService;
 
   @ApiOperation(value = "카테고리에 맞는 게시글 목록을 반환하는 메소드")
   @ApiImplicitParam(name = "type", value = "게시글 카테고리", dataType = "String")

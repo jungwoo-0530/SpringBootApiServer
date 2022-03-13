@@ -27,7 +27,9 @@ dependencies {
 
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
 
-
+    //image
+    implementation 'com.github.downgoon:marvin:1.5.5'
+    implementation 'com.github.downgoon:MarvinPlugins:1.5.5'
 
     compileOnly 'org.projectlombok:lombok'
 

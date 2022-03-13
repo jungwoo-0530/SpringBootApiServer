@@ -184,51 +184,5 @@ public class MemberController {
   }
 
 
-//  @SneakyThrows
-//  @PostMapping("/test/image/upload")
-//  public ResponseEntity<? extends BasicResponse> imageUploadTest(@RequestPart(value = "file", required = false) MultipartFile file,
-//                                                                 @RequestPart(value = "dto") ImageDto imageDto ) throws IOException {
-//    String originalFilename = file.getOriginalFilename();
-//    File dest = new File("/Users/jungwoo/Desktop/dev/SpringBootApiServer/backend/src/main/resources/img/" +
-//        originalFilename);
-//    try {
-//      file.transferTo(dest);
-//    } catch (IOException | IllegalStateException e) {
-//      e.printStackTrace();
-//    }
-//
-//    return ResponseEntity.ok().body(new CommonResponse<>("이미지 업로드 완료했습니다."));
-//
-//  }
-//  @SneakyThrows
-//  @PostMapping("/image/upload")
-//  public ImageDto imageUploadTest(MultipartHttpServletRequest multipartReq) throws IOException {
-//
-//    log.info("===========imageUploadTest===========================");
-//
-//    MultipartFile file = multipartReq.getFile("upload");
-//    String originalFilename = file.getOriginalFilename();
-//    File dest = new File("/Users/jungwoo/Desktop/dev/SpringBootApiServer/frontend/public/img/boardImage/" +
-//        originalFilename);
-//
-//
-//    file.transferTo(dest);
-//
-//    String url = "/img/boardImage/"+originalFilename;
-//
-//
-//
-//    return ImageDto.builder().uploaded(true).url(url).build();
-//
-//  }
-//
-//  @Getter
-//  @Builder
-//  public static class ImageDto {
-//
-//    boolean uploaded;
-//    String url;
-//  }
-
 
 }
