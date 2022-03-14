@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import java.util.List;
 
 import static com.jungwoo.apiserver.domain.QBoard.board;
+
 /**
  * fileName     : BoardRepositoryImpl
  * author       : jungwoo
@@ -61,7 +62,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
 
 //    List<BoardPageDto> content = results.getResults();
 
-    List<BoardPageDto>content = query.fetch();
+    List<BoardPageDto> content = query.fetch();
     return new PageImpl<>(content, pageable, total);
 
   }
