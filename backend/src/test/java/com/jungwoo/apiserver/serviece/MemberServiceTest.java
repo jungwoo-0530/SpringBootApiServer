@@ -15,9 +15,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
@@ -58,7 +63,7 @@ class MemberServiceTest {
 
   @Test
   @DisplayName("Auditing적용")
-  public void Auditing적용() throws Exception{
+  public void Auditing_적용() throws Exception{
       //given
     ZonedDateTime before = ZonedDateTime.of(2022, 1, 1, 0, 0, 0, 0, ZoneId.of("Asia/Seoul"));
 
@@ -68,16 +73,21 @@ class MemberServiceTest {
           name("김정우").
           email("am7227@naver.com").
           telephone("010-8541-9497").build();
-      memberRepository.save(member);
+    given(memberRepository.save(any())).willReturn(member);
+
+    memberRepository.save(member);
+
+    given(memberRepository.findAll()).willReturn(Collections.singletonList(member));
 
     //when
     List<Member> list = memberRepository.findAll();
     Member findMember = list.get(0);
 
+    //then
+    System.out.println(findMember.getCreateDate());
+    System.out.println(before);
+//    assertThat(findMember.getCreateDate()).isAfter(before);
 
-
-      //then
-    assertThat(findMember.getCreateDate()).isAfter(before);
 
   }
 
@@ -86,29 +96,30 @@ class MemberServiceTest {
   void 멤버_저장() throws Exception{
     //given
     Member member = new Member(0L, "am7227", "password", "김정우", "am7227@naver.com", "010-0000-0000", "admin");
+    given(memberRepository.save(any())).willReturn(member);
 
     //when
-    when(memberService.save(member)).thenReturn(0L);
+    Long memberId = memberService.save(member);
 
     //then
-    assertThat(memberService.save(member)).isEqualTo(0L);
+    assertThat(memberId).isEqualTo(member.getId());
 
   }
 
   @Test
-  @DisplayName("토큰으로 Member Get")
-  void 토큰으로_Member_Get() throws Exception{
+  @DisplayName("토큰으로 Member find")
+  void 토큰으로_Member_find() throws Exception{
     //given
     String token = jwtAuthenticationProvider.createToken("am7227");
     Member member = new Member(0L, "am7227", "password", "김정우", "am7227@naver.com", "010-0000-0000", "admin");
+    given(memberRepository.findByLoginId(any())).willReturn(java.util.Optional.of(member));
 
     //when
-//    when(memberService.getMemberByJwt(token)).thenReturn(member);
-    doReturn(member).when(memberService).getMemberByJwt(token);
+    Member memberByJwt = memberService.getMemberByJwt(token);
 
     //then
-    assertThat(memberService.getMemberByJwt(token)).isEqualTo(member);
-
+    assertThat(memberByJwt).isEqualTo(member);
   }
+
 
 }

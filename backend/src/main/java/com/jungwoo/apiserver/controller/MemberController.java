@@ -67,12 +67,6 @@ public class MemberController {
     }
   }
 
-  @Data
-  @AllArgsConstructor
-  public static class registerDto {
-    Long id;
-    String loginId;
-  }
 
   @ApiOperation(value = "로그인하는 메소드")
   @PostMapping("/login")

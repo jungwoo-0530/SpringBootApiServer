@@ -120,6 +120,7 @@ public class ImageUtilService {
 
     BufferedImage image = ImageIO.read(originalImage.getInputStream());
 
+
     int originalWidth = image.getWidth();
     int originalHeight = image.getHeight();
     log.info(String.valueOf(originalHeight));

@@ -48,6 +48,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize());
     //데이터 정렬을 OrderSpecifier를 사용해서 편리하게 사용 가능.
+
     for (Sort.Order o : pageable.getSort()) {
       PathBuilder pathBuilder = new PathBuilder(board.getType(), board.getMetadata());
       query.orderBy(new OrderSpecifier(o.isAscending() ? Order.ASC : Order.DESC,
@@ -57,10 +58,10 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     long total = jpaQueryFactory
         .select(board)
         .from(board)
-        .where(board.type.eq(pageType))
+        .where(board.type.eq(pageType),
+            board.available.eq(true))
         .fetch().size();
 
-//    List<BoardPageDto> content = results.getResults();
 
     List<BoardPageDto> content = query.fetch();
     return new PageImpl<>(content, pageable, total);

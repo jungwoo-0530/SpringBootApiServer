@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import java.util.Optional;
 
 /**
  * fileName     : InitDb
@@ -65,5 +66,66 @@ public class InitDb {
 //    log.info("DB INIT PASS");
 //  }
 
+//  @PostConstruct
+//  @Transactional
+//  public void adminInit() {
+//    Member admin = Member.builder().loginId("admin").email("admin@gmail.com").telephone("010-8541-9497")
+//        .name("김정우").password("admin").role("admin").build();
+//
+//    memberService.save(admin);
+//  }
+
+
+  @PostConstruct
+  @Transactional
+  public void init() {
+    Board board = boardRepository.findById(1L).orElseThrow(NullPointerException::new);
+
+
+
+//    Comment comment1 = Comment.builder().content("1").ref(1L).step(0L).refOrder(0L).answerNum(0L).parentNum(null).board(board).build();
+//
+//    Comment comment2 = Comment.builder().content("2").ref(2L).step(0L).refOrder(0L).answerNum(3L).parentNum(null).board(board).build();
+//    Comment comment3 = Comment.builder().content("3").ref(3L).step(0L).refOrder(0L).answerNum(0L).parentNum(null).board(board).build();
+//    Comment comment4 = Comment.builder().content("2-1").ref(2L).step(1L).refOrder(1L).answerNum(1L).parentNum(2L).board(board).build();
+//    Comment comment5 = Comment.builder().content("2-2").ref(2L).step(1L).refOrder(5L).answerNum(0L).parentNum(2L).board(board).build();
+//    Comment comment6 = Comment.builder().content("2-1-1").ref(2L).step(2L).refOrder(2L).answerNum(1L).parentNum(4L).board(board).build();
+//    Comment comment7 = Comment.builder().content("2-3").ref(2L).step(1L).refOrder(6L).answerNum(1L).parentNum(2L).board(board).build();
+//    Comment comment8 = Comment.builder().content("2-3-1").ref(2L).step(2L).refOrder(7L).answerNum(1L).parentNum(7L).board(board).build();
+//    Comment comment9 = Comment.builder().content("2-3-1-1").ref(2L).step(3L).refOrder(8L).answerNum(0L).parentNum(8L).board(board).build();
+//    Comment comment10 = Comment.builder().content("2-1-1-1").ref(2L).step(3L).refOrder(3L).answerNum(1L).parentNum(6L).board(board).build();
+//    Comment comment11 = Comment.builder().content("2-1-1-1-1").ref(2L).step(4L).refOrder(4L).answerNum(0L).parentNum(10L).board(board).build();
+//   Comment comment1 = Comment.builder().content("1").board(board).build();
+//    Comment comment2 = Comment.builder().content("2").board(board).build();
+//    Comment comment3 = Comment.builder().content("3").board(board).build();
+//
+//    Comment comment4 = Comment.builder().content("2-1").board(board).build();
+
+
+//    Comment comment5 = Comment.builder().content("2-2").ref(2L).step(1L).refOrder(5L).answerNum(0L).parentNum(2L).board(board).build();
+//    Comment comment6 = Comment.builder().content("2-1-1").ref(2L).step(2L).refOrder(2L).answerNum(1L).parentNum(4L).board(board).build();
+//    Comment comment7 = Comment.builder().content("2-3").ref(2L).step(1L).refOrder(6L).answerNum(1L).parentNum(2L).board(board).build();
+//    Comment comment8 = Comment.builder().content("2-3-1").ref(2L).step(2L).refOrder(7L).answerNum(1L).parentNum(7L).board(board).build();
+//    Comment comment9 = Comment.builder().content("2-3-1-1").ref(2L).step(3L).refOrder(8L).answerNum(0L).parentNum(8L).board(board).build();
+//    Comment comment10 = Comment.builder().content("2-1-1-1").ref(2L).step(3L).refOrder(3L).answerNum(1L).parentNum(6L).board(board).build();
+//    Comment comment11 = Comment.builder().content("2-1-1-1-1").ref(2L).step(4L).refOrder(4L).answerNum(0L).parentNum(10L).board(board).build();
+
+//    commentService.initSave(comment1);
+//    commentService.initSave(comment2);
+//    commentService.initSave(comment3);
+//    commentService.initSave(comment4);
+//    commentService.initSave(comment5);
+//    commentService.initSave(comment6);
+//    commentService.initSave(comment7);
+//    commentService.initSave(comment8);
+//    commentService.initSave(comment9);
+//    commentService.initSave(comment10);
+//    commentService.initSave(comment11);
+
+//    commentService.saveHierarchyOrders(comment1);
+//    commentService.saveHierarchyOrders(comment2);
+//    commentService.saveHierarchyOrders(comment3);
+//    commentService.saveHierarchyOrders(comment4);
+  }
 
 }

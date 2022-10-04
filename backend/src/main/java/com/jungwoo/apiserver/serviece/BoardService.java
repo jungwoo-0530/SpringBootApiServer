@@ -76,7 +76,7 @@ public class BoardService {
 
     Board board = optionalBoard.get();
 //    board.plusViewNum(board.getHit());
-    boardRepository.plusBoardHit(boardId);
+    boardRepository.addViewHit(boardId);
     return board;
   }
 
@@ -92,5 +92,32 @@ public class BoardService {
   public void updateBoard(Board board) {
     Board one = boardRepository.getById(board.getId());
     one.changeBoard(board);
+  }
+
+
+  //////////Security
+  public boolean isAuthorityAtBoardUpdateAndDelete(Member member, Board board) {
+
+    if (member.getRole().equals("ADMIN")) {
+      return true;
+    } else if (board.getMember().getId().equals(member.getId())) {
+      return true;
+    } else {
+      return false;
+    }
+
+  }
+
+  //boardType에 따른 권한
+  public boolean isAuthorityAtBoardWrite(String boardType, Member member) {
+
+    if (member.getRole().equals("ADMIN")) {
+      return true;
+    } else if (boardType.equals("qna") && member.getRole().equals("MEMBER")) {
+      return true;
+    }else{
+      return false;
+    }
+
   }
 }

@@ -55,6 +55,7 @@ public class BoardController {
     log.info("{}", memberService.getClass());
 
 
+
     return boardService.findPageSort(boardType, pageable);
   }
 
@@ -63,7 +64,8 @@ public class BoardController {
       @ApiImplicitParam(name = "boardId", value = "게시글 아이디", paramType = "path", dataType = "Long"),
   })
   @GetMapping("/boards/{boardId}")
-  public ResponseEntity<? extends BasicResponse> readBoard(@PathVariable(name = "boardId") Long boardId) {
+  public ResponseEntity<? extends BasicResponse> readBoard(@PathVariable(name = "boardId") Long boardId,
+                                                           HttpServletRequest request) {
     log.info("BoardController readBoard");
 
     Board board = boardService.getBoardDetail(boardId);
@@ -73,6 +75,7 @@ public class BoardController {
           body(new ErrorResponse("해당 게시물이 존재하지 않습니다"));
     }
 
+    boolean editable = boardService.isAuthorityAtBoardUpdateAndDelete(memberService.getMemberByJwt(jwtAuthenticationProvider.getTokenInRequestHeader(request, "Bearer")), board);
 
 
     BoardDto boardDto = BoardDto.builder().
@@ -82,6 +85,7 @@ public class BoardController {
         type(board.getType()).
         email(board.getMember().getEmail()).
         available(board.isAvailable()).
+        editable(editable).
         updateTime(board.getUpdateDate()).
         createTime(board.getCreateDate()).
         build();
@@ -100,7 +104,9 @@ public class BoardController {
     String author;
     String type;
     String email;
+    Member member;
     boolean available;
+    boolean editable;
     ZonedDateTime createTime;
     ZonedDateTime updateTime;
   }
@@ -109,9 +115,8 @@ public class BoardController {
   @SneakyThrows
   @ApiOperation(value = "게시글을 생성하는 메소드")
   @ApiImplicitParam(name = "boardType", value = "게시글 카테고리")
-  @PostMapping("/boards/{boardType}")
-  public ResponseEntity<? extends BasicResponse> createBoard(@PathVariable(name = "boardType") String type,
-                                                             @RequestBody BoardDto boardDto,
+  @PostMapping("/boards")
+  public ResponseEntity<? extends BasicResponse> createBoard(@RequestBody BoardDto boardDto,
                                                              HttpServletRequest request) throws IOException {
 
     Member member = memberService.getMemberByJwt(jwtAuthenticationProvider.getTokenInRequestHeader(request, "Bearer"));
@@ -119,7 +124,7 @@ public class BoardController {
         title(boardDto.title).
         content(boardDto.content).
         member(member).
-        type(type).
+        type(boardDto.type).
         hit(1).
         available(true).
         build();
@@ -151,7 +156,8 @@ public class BoardController {
 
   @PutMapping("/boards/{boardId}")
   public ResponseEntity<? extends BasicResponse> updateBoard(@PathVariable(name = "boardId") Long boardId,
-                                                             @RequestBody BoardDto boardDto) {
+                                                             @RequestBody BoardDto boardDto,
+                                                             HttpServletRequest request) {
 
     log.info("BoardController updateBoard");
 
@@ -160,9 +166,44 @@ public class BoardController {
         title(boardDto.getTitle()).
         content(boardDto.getContent()).build();
 
+//    Member member = memberService.getMemberByJwt(jwtAuthenticationProvider.getTokenInRequestHeader(request, "Bearer"));
+
     boardService.updateBoard(board);
 
     return ResponseEntity.ok().body(new CommonResponse<>("게시물을 수정했습니다."));
+  }
+
+
+//  @GetMapping("/boards/authUser/{boardId}")
+//  public ResponseEntity<? extends BasicResponse> authUser(@PathVariable(name = "boardId") Long boardId,
+//                                                            HttpServletRequest request) {
+//
+//    Member member = memberService.getMemberByJwt(jwtAuthenticationProvider.getTokenInRequestHeader(request, "Bearer"));
+//
+//    Board board = boardService.getBoardById(boardId);
+//    boolean result = boardService.isAuthority(member, board);
+//
+//    if(result)
+//      return ResponseEntity.ok().body(new CommonResponse<>("권한이 있습니다."));
+//    else
+//      return ResponseEntity.status(401).body(new CommonResponse<>("권한이 없습니다."));
+//  }
+
+  //글쓰기 클릭시 인증
+  //공지사항은 admin만 qna는 모두다.
+  @GetMapping("/boards/authUser/{boardType}")
+  public ResponseEntity<? extends BasicResponse> authUser(@PathVariable(name = "boardType") String boardType,
+                                                            HttpServletRequest request) {
+
+    Member member = memberService.getMemberByJwt(jwtAuthenticationProvider.getTokenInRequestHeader(request, "Bearer"));
+    boolean result = boardService.isAuthorityAtBoardWrite(boardType, member);
+
+    System.out.println(boardType + " " + member.getRole());
+
+    if(result)
+      return ResponseEntity.ok().body(new CommonResponse<>("권한이 있습니다."));
+    else
+      return ResponseEntity.status(401).body(new CommonResponse<>("권한이 없습니다."));
   }
 
 

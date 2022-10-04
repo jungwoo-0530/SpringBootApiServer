@@ -53,12 +53,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .accessDeniedHandler(jwtAccessDeniedHandler)
         .and()
         .authorizeRequests()
+        //board
         .antMatchers(HttpMethod.GET, "/boards/{boardId}").authenticated()
         .antMatchers(HttpMethod.POST, "/boards/notification").hasRole("admin")
         .antMatchers(HttpMethod.POST, "/boards/qna").authenticated()
-        .regexMatchers(HttpMethod.GET, "\\/boards\\?boardType=(&.*|$)").permitAll()// /boards?boardType=qna&page=0 ...
-        .antMatchers("/register","/login").permitAll()
         .antMatchers(HttpMethod.DELETE, "/boards/{boardId}").authenticated()
+        .antMatchers(HttpMethod.PUT, "/boards/{boardId}").authenticated()
+        .regexMatchers(HttpMethod.GET, "\\/boards\\?boardType=(&.*|$)").permitAll()// /boards?boardType=qna&page=0 ...
+
+        //comment
+//        .antMatchers(HttpMethod.PUT, "/comments/{boardId}").authenticated()
+//        .antMatchers(HttpMethod.GET, "/comments").permitAll()
+        .antMatchers(HttpMethod.POST, "/comments").authenticated()
+        .antMatchers("/register","/login").permitAll()
         .and()
         .formLogin().disable()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

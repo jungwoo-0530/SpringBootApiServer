@@ -12,7 +12,4 @@ import org.springframework.data.domain.Pageable;
 public interface BoardRepositoryCustom {
   Page<BoardPageDto> findAllPageSort(String boardType, Pageable pageable);
 
-
-
-
 }
