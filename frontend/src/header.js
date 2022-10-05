@@ -93,6 +93,11 @@ class Header extends Component{
           </NavLink>
           <NavLink to="/service" style={categoryStyle}>CIDS 서비스 </NavLink>
 
+          <NavLink to={{pathname:"/userlist"}} style={categoryStyle} >
+            회원들
+          </NavLink>
+
+
         </Nav>
         {this.state.loginState ? 
         <Nav inline="true">
@@ -106,6 +111,8 @@ class Header extends Component{
           <LoginForm show = {this.state.loginFormShow} showHandler={this.handleLoginFormShow}/>
         </Nav>
         }
+
+        
 
       </Navbar.Collapse>
     </Navbar>

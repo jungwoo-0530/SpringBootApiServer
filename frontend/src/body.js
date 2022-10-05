@@ -18,6 +18,8 @@ import Upload from "./upload"
 
 import PostList from "./components/Post/PostList";
 
+import UserList from './User/NewUserList';
+
 
 class Body extends Component {
     render() {
@@ -36,6 +38,7 @@ class Body extends Component {
                         <Route exact path="/notice" component={PostList}/>
                         <Route path="/uploads" component={Upload}/>
 
+                        <Route path="/userlist" component={UserList}/>
          
 
 
