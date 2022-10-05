@@ -4,6 +4,7 @@ import com.jungwoo.apiserver.domain.Board;
 import com.jungwoo.apiserver.domain.Member;
 import com.jungwoo.apiserver.dto.*;
 import com.jungwoo.apiserver.dto.board.BoardPageDto;
+import com.jungwoo.apiserver.dto.board.BoardSearchCondition;
 import com.jungwoo.apiserver.security.jwt.JwtAuthenticationProvider;
 import com.jungwoo.apiserver.serviece.ImageUtilService;
 import com.jungwoo.apiserver.serviece.MemberService;
@@ -49,7 +50,7 @@ public class BoardController {
   @ApiImplicitParam(name = "type", value = "게시글 카테고리", dataType = "String")
   @GetMapping("/boards")
   public Page<BoardPageDto> listBoard(@RequestParam(value = "boardType") String boardType,
-                                      @PageableDefault(size = 10, sort = "id",
+                                      @PageableDefault(size = 2, sort = "id",
                                           direction = Sort.Direction.DESC) Pageable pageable) {
     log.info("BoardController getmapping list");
     log.info("{}", memberService.getClass());
@@ -174,6 +175,13 @@ public class BoardController {
   }
 
 
+  @GetMapping("/boards/search")
+  public Page<BoardPageDto> listBoardBySearch(@RequestBody BoardSearchCondition condition, @PageableDefault(size = 2, sort = "id",
+                                              direction = Sort.Direction.DESC) Pageable pageable) {
+
+    return boardService.findAllPageBySearch(condition, pageable);
+  }
+
 //  @GetMapping("/boards/authUser/{boardId}")
 //  public ResponseEntity<? extends BasicResponse> authUser(@PathVariable(name = "boardId") Long boardId,
 //                                                            HttpServletRequest request) {
@@ -193,14 +201,14 @@ public class BoardController {
   //공지사항은 admin만 qna는 모두다.
   @GetMapping("/boards/authUser/{boardType}")
   public ResponseEntity<? extends BasicResponse> authUser(@PathVariable(name = "boardType") String boardType,
-                                                            HttpServletRequest request) {
+                                                          HttpServletRequest request) {
 
     Member member = memberService.getMemberByRequestJwt(request);
     boolean result = boardService.isAuthorityAtBoardWrite(boardType, member);
 
     System.out.println(boardType + " " + member.getRole());
 
-    if(result)
+    if (result)
       return ResponseEntity.ok().body(new CommonResponse<>("권한이 있습니다."));
     else
       return ResponseEntity.status(401).body(new CommonResponse<>("권한이 없습니다."));

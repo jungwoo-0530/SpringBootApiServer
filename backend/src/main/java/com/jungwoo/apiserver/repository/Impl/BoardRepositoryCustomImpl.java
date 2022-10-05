@@ -1,10 +1,12 @@
 package com.jungwoo.apiserver.repository.Impl;
 
 import com.jungwoo.apiserver.dto.board.BoardPageDto;
+import com.jungwoo.apiserver.dto.board.BoardSearchCondition;
 import com.jungwoo.apiserver.dto.board.QBoardPageDto;
 import com.jungwoo.apiserver.repository.BoardRepositoryCustom;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -24,7 +26,7 @@ import static com.jungwoo.apiserver.domain.QBoard.board;
  * description  :
  */
 @RequiredArgsConstructor
-public class BoardRepositoryImpl implements BoardRepositoryCustom {
+public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
   private final JPAQueryFactory jpaQueryFactory;
 
@@ -67,4 +69,60 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     return new PageImpl<>(content, pageable, total);
 
   }
+
+
+  @Override
+  public Page<BoardPageDto> findAllPageByKeyword(BoardSearchCondition condition, Pageable pageable) {
+    JPAQuery<BoardPageDto> query = jpaQueryFactory
+        .select(new QBoardPageDto(
+            board.id.as("id"),
+            board.title.as("title"),
+            board.member.loginId.as("author"),
+            board.content.as("content"),
+            board.type.as("type"),
+            board.hit.as("hit"),
+            board.available.as("available"),
+            board.createDate.as("createDate"),
+            board.updateDate.as("updateDate")
+        ))
+        .where(searchOption(condition.getKeyword(), condition.getOption()))
+        .from(board)
+        .offset(pageable.getOffset())
+        .limit(pageable.getPageSize());
+
+    long total = jpaQueryFactory
+        .select(board)
+        .from(board)
+        .where(searchOption(condition.getKeyword(), condition.getOption()))
+        .fetch().size();
+
+    for (Sort.Order o : pageable.getSort()) {
+      PathBuilder pathBuilder = new PathBuilder(board.getType(), board.getMetadata());
+      query.orderBy(new OrderSpecifier(o.isAscending() ? Order.ASC : Order.DESC,
+          pathBuilder.get(o.getProperty())));
+    }
+
+    List<BoardPageDto> content = query.fetch();
+
+    return new PageImpl<>(content, pageable, total);
+  }
+
+
+  //제목 : title
+  //제목+내용 : titleAndContent
+  //글쓴 : author
+  private BooleanExpression searchOption(String keyword, String option){
+    if (option.equals("title")) {
+      return board.title.contains(keyword);
+    } else if (option.equals("titleAndContent")) {
+      return board.title.contains(keyword).or(board.content.contains(keyword));
+    } else {
+      return board.member.loginId.like(keyword);
+    }
+  }
+
+
+
+
+
 }

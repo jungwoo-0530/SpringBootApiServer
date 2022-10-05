@@ -3,6 +3,7 @@ package com.jungwoo.apiserver.serviece;
 import com.jungwoo.apiserver.domain.Board;
 import com.jungwoo.apiserver.domain.Member;
 import com.jungwoo.apiserver.dto.board.BoardPageDto;
+import com.jungwoo.apiserver.dto.board.BoardSearchCondition;
 import com.jungwoo.apiserver.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -119,5 +120,9 @@ public class BoardService {
       return false;
     }
 
+  }
+
+  public Page<BoardPageDto> findAllPageBySearch(BoardSearchCondition condition, Pageable pageable) {
+    return boardRepository.findAllPageByKeyword(condition, pageable);
   }
 }

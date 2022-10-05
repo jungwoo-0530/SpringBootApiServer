@@ -1,6 +1,7 @@
 package com.jungwoo.apiserver.repository;
 
 import com.jungwoo.apiserver.dto.board.BoardPageDto;
+import com.jungwoo.apiserver.dto.board.BoardSearchCondition;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -12,4 +13,5 @@ import org.springframework.data.domain.Pageable;
 public interface BoardRepositoryCustom {
   Page<BoardPageDto> findAllPageSort(String boardType, Pageable pageable);
 
+  Page<BoardPageDto> findAllPageByKeyword(BoardSearchCondition condition, Pageable pageable);
 }
