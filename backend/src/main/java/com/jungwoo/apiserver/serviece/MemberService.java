@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 /**
@@ -48,8 +49,8 @@ public class MemberService {
   }
 
   @Transactional(readOnly = true)
-  public Member getMemberByJwt(String token) {
-    return memberRepository.findByLoginId(jwtAuthenticationProvider.getUserPk(token)).orElseThrow(NoSuchElementException::new);
+  public Member getMemberByRequestJwt(HttpServletRequest request) {
+    return memberRepository.findByLoginId(jwtAuthenticationProvider.getUserPk(jwtAuthenticationProvider.getTokenInRequestHeader(request, "Bearer"))).orElseThrow(NoSuchElementException::new);
   }
 
   @Transactional

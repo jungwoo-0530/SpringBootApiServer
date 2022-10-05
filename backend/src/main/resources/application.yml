@@ -38,8 +38,9 @@ security:
   jwt:
     token:
       secretKey: secretkey
-      expire: 1800000
+      expire: 3600000
 #      expire: 60000//1분
+#      expire: 1800000//30분
 
 
 

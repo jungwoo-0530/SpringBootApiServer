@@ -15,16 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Date;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -141,8 +134,7 @@ public class MemberController {
   public ResponseEntity<? extends BasicResponse> memberDetail(HttpServletRequest request) {
     log.info("memberDetail in MemberController");
 
-    String token = jwtAuthenticationProvider.getTokenInRequestHeader(request, "Bearer");
-    Member member = memberService.getMemberByJwt(token);
+    Member member = memberService.getMemberByRequestJwt(request);
 
 
     return ResponseEntity.ok().body(new CommonResponse<>(MemberDto.builder().loginId(member.getLoginId()).

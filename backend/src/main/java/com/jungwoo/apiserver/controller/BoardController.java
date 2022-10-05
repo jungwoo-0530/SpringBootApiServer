@@ -75,7 +75,7 @@ public class BoardController {
           body(new ErrorResponse("해당 게시물이 존재하지 않습니다"));
     }
 
-    boolean editable = boardService.isAuthorityAtBoardUpdateAndDelete(memberService.getMemberByJwt(jwtAuthenticationProvider.getTokenInRequestHeader(request, "Bearer")), board);
+    boolean editable = boardService.isAuthorityAtBoardUpdateAndDelete(memberService.getMemberByRequestJwt(request), board);
 
 
     BoardDto boardDto = BoardDto.builder().
@@ -119,7 +119,7 @@ public class BoardController {
   public ResponseEntity<? extends BasicResponse> createBoard(@RequestBody BoardDto boardDto,
                                                              HttpServletRequest request) throws IOException {
 
-    Member member = memberService.getMemberByJwt(jwtAuthenticationProvider.getTokenInRequestHeader(request, "Bearer"));
+    Member member = memberService.getMemberByRequestJwt(request);
     Board board = Board.builder().
         title(boardDto.title).
         content(boardDto.content).
@@ -195,7 +195,7 @@ public class BoardController {
   public ResponseEntity<? extends BasicResponse> authUser(@PathVariable(name = "boardType") String boardType,
                                                             HttpServletRequest request) {
 
-    Member member = memberService.getMemberByJwt(jwtAuthenticationProvider.getTokenInRequestHeader(request, "Bearer"));
+    Member member = memberService.getMemberByRequestJwt(request);
     boolean result = boardService.isAuthorityAtBoardWrite(boardType, member);
 
     System.out.println(boardType + " " + member.getRole());

@@ -49,7 +49,7 @@ public class CommentController {
 
     log.info("{}", boardId);
 
-    Member member = memberService.getMemberByJwt(jwtAuthenticationProvider.getTokenInRequestHeader(request, "Bearer"));
+    Member member = memberService.getMemberByRequestJwt(request);
 
     return commentService.findCommentsPage(boardId, pageable, member);
 
@@ -66,7 +66,7 @@ public class CommentController {
 
 
     //1차 쿼리
-    Member member = memberService.getMemberByJwt(jwtAuthenticationProvider.getTokenInRequestHeader(request, "Bearer"));
+    Member member = memberService.getMemberByRequestJwt(request);
 
     //2차 쿼리
     Board board = boardService.getBoardById(commentDto.getBoardId());

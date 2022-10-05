@@ -9,14 +9,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,7 +20,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class MemberServiceTest {
@@ -115,7 +110,7 @@ class MemberServiceTest {
     given(memberRepository.findByLoginId(any())).willReturn(java.util.Optional.of(member));
 
     //when
-    Member memberByJwt = memberService.getMemberByJwt(token);
+    Member memberByJwt = memberService.getMemberByRequestJwt(token);
 
     //then
     assertThat(memberByJwt).isEqualTo(member);
