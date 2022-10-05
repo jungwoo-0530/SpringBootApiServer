@@ -5,12 +5,17 @@ import com.jungwoo.apiserver.dto.CommonResponse;
 import com.jungwoo.apiserver.dto.ErrorResponse;
 import com.jungwoo.apiserver.dto.member.CreateMemberRequest;
 import com.jungwoo.apiserver.domain.Member;
+import com.jungwoo.apiserver.dto.member.MemberPageDto;
 import com.jungwoo.apiserver.security.jwt.JwtAuthenticationProvider;
 import com.jungwoo.apiserver.serviece.MemberService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -170,5 +175,10 @@ public class MemberController {
   }
 
 
+  @GetMapping("/members")
+  public Page<MemberPageDto> listMember(@PageableDefault(size = 2, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+
+    return memberService.findPageSort(pageable);
+  }
 
 }

@@ -1,9 +1,12 @@
 package com.jungwoo.apiserver.serviece;
 
 import com.jungwoo.apiserver.domain.Member;
+import com.jungwoo.apiserver.dto.member.MemberPageDto;
 import com.jungwoo.apiserver.repository.MemberRepository;
 import com.jungwoo.apiserver.security.jwt.JwtAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,5 +60,10 @@ public class MemberService {
   public void updateMember(Member member) {
     Member findMember = memberRepository.findByLoginId(member.getLoginId()).orElseThrow(NoSuchElementException::new);
     findMember.change(member.getName(), member.getTelephone());
+  }
+
+  public Page<MemberPageDto> findPageSort(Pageable pageable) {
+
+    return memberRepository.findAllPageSort(pageable);
   }
 }
