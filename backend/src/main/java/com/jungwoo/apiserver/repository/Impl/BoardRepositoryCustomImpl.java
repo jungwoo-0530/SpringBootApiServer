@@ -85,7 +85,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
             board.createDate.as("createDate"),
             board.updateDate.as("updateDate")
         ))
-        .where(searchOption(condition.getKeyword(), condition.getOption()))
+        .where(searchOption(condition))
         .from(board)
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize());
@@ -93,7 +93,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
     long total = jpaQueryFactory
         .select(board)
         .from(board)
-        .where(searchOption(condition.getKeyword(), condition.getOption()))
+        .where(searchOption(condition))
         .fetch().size();
 
     for (Sort.Order o : pageable.getSort()) {
@@ -111,7 +111,11 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
   //제목 : title
   //제목+내용 : titleAndContent
   //글쓴 : author
-  private BooleanExpression searchOption(String keyword, String option){
+  private BooleanExpression searchOption(BoardSearchCondition condition){
+
+    String option = condition.getOption();
+    String keyword = condition.getKeyword();
+
     if (option.equals("title")) {
       return board.title.contains(keyword);
     } else if (option.equals("titleAndContent")) {
