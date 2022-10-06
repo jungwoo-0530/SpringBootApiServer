@@ -150,10 +150,11 @@ public class MemberController {
   }
 
 
-  @Getter
+  @Data
   @Builder
   public static class MemberDto {
 
+    private Long id;
     private String name;
     private String loginId;
     private String email;
@@ -166,7 +167,6 @@ public class MemberController {
     Member member = Member.builder().name(memberDto.getName()).
         loginId(memberDto.getLoginId()).
         email(memberDto.getEmail()).
-        role(memberDto.getRole()).
         telephone(memberDto.getTelephone()).build();
 
     memberService.updateMember(member);
@@ -176,9 +176,36 @@ public class MemberController {
 
 
   @GetMapping("/members")
-  public Page<MemberPageDto> listMember(@PageableDefault(size = 2, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+  public Page<MemberPageDto> listMember(@PageableDefault(size = 30, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
 
-    return memberService.findPageSort(pageable);
+
+      return memberService.findPageSort(pageable);
+
+  }
+
+  @GetMapping("/members/search")
+  public Page<MemberPageDto> searchMember(@PageableDefault(size = 30, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
+      @RequestBody String searchWord) {
+
+
+    return memberService.findPageSortBySearch(pageable, searchWord);
+
+  }
+
+
+
+
+  @PutMapping("/members/{memberId}")
+  public ResponseEntity<? extends BasicResponse> updateMemberByAdmin(@PathVariable(name = "memberId") Long memberId,
+                                                                     @RequestBody MemberDto memberDto
+  ) {
+
+//    Member member = Member.builder().name(memberDto.getName()).telephone(memberDto.getTelephone()).loginId(memberDto.getLoginId()).role(memberDto.getRole()).build();
+
+    memberService.updateRoleMember(memberId, memberDto.getRole());
+
+
+    return ResponseEntity.ok().body(new CommonResponse<>("유저가 수정되었습니다."));
   }
 
 }

@@ -62,8 +62,18 @@ public class MemberService {
     findMember.change(member.getName(), member.getTelephone());
   }
 
+  @Transactional
+  public void updateRoleMember(Long memberId, String role) {
+    Member member = memberRepository.getById(memberId);
+    member.changeRole(role);
+  }
+
   public Page<MemberPageDto> findPageSort(Pageable pageable) {
 
     return memberRepository.findAllPageSort(pageable);
+  }
+
+  public Page<MemberPageDto> findPageSortBySearch(Pageable pageable, String searchWord) {
+    return memberRepository.findAllPageSortBySearch(pageable, searchWord);
   }
 }

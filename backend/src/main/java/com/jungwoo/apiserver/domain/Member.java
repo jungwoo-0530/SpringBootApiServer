@@ -34,6 +34,10 @@ public class Member extends BaseTimeEntity {
     this.telephone = telephone;
   }
 
+  public void changeRole(String role) {
+    this.role = role;
+  }
+
   public void changePassword(String password) {
     this.password = password;
   }

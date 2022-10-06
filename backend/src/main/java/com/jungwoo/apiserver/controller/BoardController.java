@@ -5,7 +5,6 @@ import com.jungwoo.apiserver.domain.Member;
 import com.jungwoo.apiserver.dto.*;
 import com.jungwoo.apiserver.dto.board.BoardPageDto;
 import com.jungwoo.apiserver.dto.board.BoardSearchCondition;
-import com.jungwoo.apiserver.security.jwt.JwtAuthenticationProvider;
 import com.jungwoo.apiserver.serviece.ImageUtilService;
 import com.jungwoo.apiserver.serviece.MemberService;
 import com.jungwoo.apiserver.serviece.BoardService;
@@ -42,7 +41,6 @@ import java.time.ZonedDateTime;
 public class BoardController {
 
   private final BoardService boardService;
-  private final JwtAuthenticationProvider jwtAuthenticationProvider;
   private final MemberService memberService;
   private final ImageUtilService imageUtilService;
 
@@ -50,7 +48,7 @@ public class BoardController {
   @ApiImplicitParam(name = "type", value = "게시글 카테고리", dataType = "String")
   @GetMapping("/boards")
   public Page<BoardPageDto> listBoard(@RequestParam(value = "boardType") String boardType,
-                                      @PageableDefault(size = 2, sort = "id",
+                                      @PageableDefault(size = 10, sort = "id",
                                           direction = Sort.Direction.DESC) Pageable pageable) {
     log.info("BoardController getmapping list");
     log.info("{}", memberService.getClass());
@@ -69,14 +67,15 @@ public class BoardController {
                                                            HttpServletRequest request) {
     log.info("BoardController readBoard");
 
-    Board board = boardService.getBoardDetail(boardId);
+    Board board = boardService.getBoardAndAddHit(boardId);
+
 
     if (!board.isAvailable()) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).
-          body(new ErrorResponse("해당 게시물이 존재하지 않습니다"));
+          body(new ErrorResponse("해당 게시물은 삭제된 게시물입니다."));
     }
 
-    boolean editable = boardService.isAuthorityAtBoardUpdateAndDelete(memberService.getMemberByRequestJwt(request), board);
+    boolean editable = boardService.isAuthorityAtBoardUpdateAndDelete(request, board);
 
 
     BoardDto boardDto = BoardDto.builder().
@@ -121,6 +120,7 @@ public class BoardController {
                                                              HttpServletRequest request) throws IOException {
 
     Member member = memberService.getMemberByRequestJwt(request);
+
     Board board = Board.builder().
         title(boardDto.title).
         content(boardDto.content).
@@ -133,7 +133,7 @@ public class BoardController {
 
     Long id = null;
     try {
-      id = boardService.createBoard(board);
+      id = boardService.saveBoard(board);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -181,21 +181,6 @@ public class BoardController {
 
     return boardService.findAllPageBySearch(condition, pageable);
   }
-
-//  @GetMapping("/boards/authUser/{boardId}")
-//  public ResponseEntity<? extends BasicResponse> authUser(@PathVariable(name = "boardId") Long boardId,
-//                                                            HttpServletRequest request) {
-//
-//    Member member = memberService.getMemberByJwt(jwtAuthenticationProvider.getTokenInRequestHeader(request, "Bearer"));
-//
-//    Board board = boardService.getBoardById(boardId);
-//    boolean result = boardService.isAuthority(member, board);
-//
-//    if(result)
-//      return ResponseEntity.ok().body(new CommonResponse<>("권한이 있습니다."));
-//    else
-//      return ResponseEntity.status(401).body(new CommonResponse<>("권한이 없습니다."));
-//  }
 
   //글쓰기 클릭시 인증
   //공지사항은 admin만 qna는 모두다.
