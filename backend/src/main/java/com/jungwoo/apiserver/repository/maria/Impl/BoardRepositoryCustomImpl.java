@@ -1,9 +1,9 @@
-package com.jungwoo.apiserver.repository.Impl;
+package com.jungwoo.apiserver.repository.maria.Impl;
 
 import com.jungwoo.apiserver.dto.board.BoardPageDto;
 import com.jungwoo.apiserver.dto.board.BoardSearchCondition;
 import com.jungwoo.apiserver.dto.board.QBoardPageDto;
-import com.jungwoo.apiserver.repository.BoardRepositoryCustom;
+import com.jungwoo.apiserver.repository.maria.BoardRepositoryCustom;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -18,7 +18,7 @@ import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
-import static com.jungwoo.apiserver.domain.QBoard.board;
+import static com.jungwoo.apiserver.domain.maria.QBoard.board;
 
 /**
  * fileName     : BoardRepositoryImpl

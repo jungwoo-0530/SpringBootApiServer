@@ -1,7 +1,7 @@
 package com.jungwoo.apiserver.security;
 
-import com.jungwoo.apiserver.domain.Member;
-import com.jungwoo.apiserver.repository.MemberRepository;
+import com.jungwoo.apiserver.domain.maria.Member;
+import com.jungwoo.apiserver.repository.maria.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

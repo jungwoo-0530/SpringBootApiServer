@@ -2,7 +2,7 @@ package com.jungwoo.apiserver.security;
 
 import java.util.Collection;
 
-import com.jungwoo.apiserver.domain.Member;
+import com.jungwoo.apiserver.domain.maria.Member;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 /**

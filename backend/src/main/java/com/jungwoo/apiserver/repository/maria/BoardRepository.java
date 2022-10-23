@@ -1,6 +1,6 @@
-package com.jungwoo.apiserver.repository;
+package com.jungwoo.apiserver.repository.maria;
 
-import com.jungwoo.apiserver.domain.Board;
+import com.jungwoo.apiserver.domain.maria.Board;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

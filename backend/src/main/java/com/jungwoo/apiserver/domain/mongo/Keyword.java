@@ -10,9 +10,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.PrePersist;
-import java.time.ZonedDateTime;
 import java.util.Date;
 
 /**
@@ -42,10 +39,5 @@ public class Keyword{
   @Column(name = "update_date")
   private Date updateDate;
 
-//  @PrePersist
-//  public void prePersist(){
-//    this.createDate = Date.from(ZonedDateTime.now().toInstant());
-//    this.updateDate = Date.from(ZonedDateTime.now().toInstant());
-//  }
 
 }

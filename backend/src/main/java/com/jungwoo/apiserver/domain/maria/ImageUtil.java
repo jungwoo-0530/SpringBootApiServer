@@ -1,5 +1,6 @@
-package com.jungwoo.apiserver.domain;
+package com.jungwoo.apiserver.domain.maria;
 
+import com.jungwoo.apiserver.domain.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -15,7 +16,7 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ImageUtil extends BaseTimeEntity{
+public class ImageUtil extends BaseTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

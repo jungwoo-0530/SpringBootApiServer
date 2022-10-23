@@ -1,6 +1,6 @@
 package com.jungwoo.apiserver.controller;
 
-import com.jungwoo.apiserver.domain.ImageUtil;
+import com.jungwoo.apiserver.domain.maria.ImageUtil;
 import com.jungwoo.apiserver.dto.BasicResponse;
 import com.jungwoo.apiserver.dto.CommonResponse;
 import com.jungwoo.apiserver.dto.ErrorResponse;

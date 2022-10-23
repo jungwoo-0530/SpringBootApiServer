@@ -1,13 +1,8 @@
-package com.jungwoo.apiserver.repository;
+package com.jungwoo.apiserver.repository.maria;
 
-import com.jungwoo.apiserver.domain.Comment;
+import com.jungwoo.apiserver.domain.maria.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 /**
  * fileName     : CommentRepository

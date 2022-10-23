@@ -4,7 +4,7 @@ import com.jungwoo.apiserver.dto.BasicResponse;
 import com.jungwoo.apiserver.dto.CommonResponse;
 import com.jungwoo.apiserver.dto.ErrorResponse;
 import com.jungwoo.apiserver.dto.member.CreateMemberRequest;
-import com.jungwoo.apiserver.domain.Member;
+import com.jungwoo.apiserver.domain.maria.Member;
 import com.jungwoo.apiserver.dto.member.MemberPageDto;
 import com.jungwoo.apiserver.security.jwt.JwtAuthenticationProvider;
 import com.jungwoo.apiserver.serviece.MemberService;

@@ -1,6 +1,6 @@
 package com.jungwoo.apiserver.dto.comment;
 
-import com.jungwoo.apiserver.domain.Comment;
+import com.jungwoo.apiserver.domain.maria.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,8 +1,8 @@
 package com.jungwoo.apiserver.controller;
 
-import com.jungwoo.apiserver.domain.Board;
-import com.jungwoo.apiserver.domain.Comment;
-import com.jungwoo.apiserver.domain.Member;
+import com.jungwoo.apiserver.domain.maria.Board;
+import com.jungwoo.apiserver.domain.maria.Comment;
+import com.jungwoo.apiserver.domain.maria.Member;
 import com.jungwoo.apiserver.dto.BasicResponse;
 import com.jungwoo.apiserver.dto.CommonResponse;
 import com.jungwoo.apiserver.dto.comment.CommentDto;

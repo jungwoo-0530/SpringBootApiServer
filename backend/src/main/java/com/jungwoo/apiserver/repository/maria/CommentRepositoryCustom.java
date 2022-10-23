@@ -1,15 +1,10 @@
-package com.jungwoo.apiserver.repository;
+package com.jungwoo.apiserver.repository.maria;
 
-import com.jungwoo.apiserver.domain.Board;
-import com.jungwoo.apiserver.domain.Comment;
-import com.jungwoo.apiserver.domain.Member;
+import com.jungwoo.apiserver.domain.maria.Comment;
+import com.jungwoo.apiserver.domain.maria.Member;
 import com.jungwoo.apiserver.dto.comment.CommentPageDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-
-import java.util.List;
 
 
 /**

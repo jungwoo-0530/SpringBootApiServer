@@ -1,6 +1,6 @@
-package com.jungwoo.apiserver.repository;
+package com.jungwoo.apiserver.repository.maria;
 
-import com.jungwoo.apiserver.domain.ImageUtil;
+import com.jungwoo.apiserver.domain.maria.ImageUtil;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

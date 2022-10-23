@@ -1,4 +1,4 @@
-package com.jungwoo.apiserver.repository;
+package com.jungwoo.apiserver.repository.maria;
 
 import com.jungwoo.apiserver.dto.board.BoardPageDto;
 import com.jungwoo.apiserver.dto.board.BoardSearchCondition;

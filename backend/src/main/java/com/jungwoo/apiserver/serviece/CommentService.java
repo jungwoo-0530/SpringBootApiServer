@@ -1,19 +1,16 @@
 package com.jungwoo.apiserver.serviece;
 
-import com.jungwoo.apiserver.domain.Board;
-import com.jungwoo.apiserver.domain.Comment;
-import com.jungwoo.apiserver.domain.Member;
+import com.jungwoo.apiserver.domain.maria.Comment;
+import com.jungwoo.apiserver.domain.maria.Member;
 import com.jungwoo.apiserver.dto.comment.CommentPageDto;
-import com.jungwoo.apiserver.repository.BoardRepository;
-import com.jungwoo.apiserver.repository.CommentRepository;
+import com.jungwoo.apiserver.repository.maria.BoardRepository;
+import com.jungwoo.apiserver.repository.maria.CommentRepository;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 /**
  * fileName     : CommentService

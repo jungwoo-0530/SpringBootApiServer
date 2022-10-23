@@ -1,9 +1,8 @@
 package com.jungwoo.apiserver.serviece;
 
-import com.jungwoo.apiserver.domain.Board;
-import com.jungwoo.apiserver.domain.ImageUtil;
-import com.jungwoo.apiserver.repository.ImageUtilRepository;
-import lombok.Data;
+import com.jungwoo.apiserver.domain.maria.Board;
+import com.jungwoo.apiserver.domain.maria.ImageUtil;
+import com.jungwoo.apiserver.repository.maria.ImageUtilRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;

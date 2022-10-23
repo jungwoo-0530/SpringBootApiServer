@@ -1,11 +1,10 @@
 package com.jungwoo.apiserver.serviece;
 
-import com.jungwoo.apiserver.domain.Board;
-import com.jungwoo.apiserver.domain.Member;
+import com.jungwoo.apiserver.domain.maria.Board;
+import com.jungwoo.apiserver.domain.maria.Member;
 import com.jungwoo.apiserver.dto.board.BoardPageDto;
 import com.jungwoo.apiserver.dto.board.BoardSearchCondition;
-import com.jungwoo.apiserver.repository.BoardRepository;
-import com.jungwoo.apiserver.security.jwt.JwtAuthenticationProvider;
+import com.jungwoo.apiserver.repository.maria.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

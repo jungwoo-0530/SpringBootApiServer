@@ -1,19 +1,15 @@
-package com.jungwoo.apiserver.repository.Impl;
+package com.jungwoo.apiserver.repository.maria.Impl;
 
-import com.jungwoo.apiserver.domain.Board;
-import com.jungwoo.apiserver.domain.Comment;
-import com.jungwoo.apiserver.domain.Member;
-import com.jungwoo.apiserver.domain.QMember;
+import com.jungwoo.apiserver.domain.maria.Comment;
+import com.jungwoo.apiserver.domain.maria.Member;
 //import com.jungwoo.apiserver.dto.comment.CommentPageDto;
 //import com.jungwoo.apiserver.dto.comment.QCommentPageDto;
 import com.jungwoo.apiserver.dto.comment.CommentPageDto;
 import com.jungwoo.apiserver.dto.comment.QCommentPageDto;
-import com.jungwoo.apiserver.repository.CommentRepositoryCustom;
-import com.querydsl.core.types.Expression;
+import com.jungwoo.apiserver.repository.maria.CommentRepositoryCustom;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -22,10 +18,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
-import static com.jungwoo.apiserver.domain.QComment.comment;
+import static com.jungwoo.apiserver.domain.maria.QComment.comment;
 
 /**
  * fileName     : CommentRepositoryImpl

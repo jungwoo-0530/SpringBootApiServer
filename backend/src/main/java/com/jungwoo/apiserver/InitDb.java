@@ -1,20 +1,13 @@
 package com.jungwoo.apiserver;
 
-import com.jungwoo.apiserver.domain.Board;
-import com.jungwoo.apiserver.domain.Comment;
-import com.jungwoo.apiserver.domain.Member;
-import com.jungwoo.apiserver.repository.MemberRepository;
-import com.jungwoo.apiserver.repository.BoardRepository;
+import com.jungwoo.apiserver.repository.maria.MemberRepository;
+import com.jungwoo.apiserver.repository.maria.BoardRepository;
 import com.jungwoo.apiserver.serviece.CommentService;
 import com.jungwoo.apiserver.serviece.MemberService;
 import com.jungwoo.apiserver.serviece.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.PostConstruct;
-import java.util.Optional;
 
 /**
  * fileName     : InitDb
@@ -31,19 +24,36 @@ public class InitDb {
   private final BoardService boardService;
   private final MemberService memberService;
   private final CommentService commentService;
-//
+
 //  @PostConstruct
 //  @Transactional
 //  public void init(){
+//            for(int i = 20; i<50; i++)
+//    {
+//      for(int j = 0; j<10; j++){
+//        Member member = Member.builder().loginId("member"+i+j).password("asdf1234!!").email("member"+i+j+"@naver.com")
+//            .role("member").name("김철수").telephone("010-1234-91"+i+j).build();
+//        memberService.save(member);
+//      }
 //
+//    }
+//
+//  }
+
 //    Member admin = Member.builder().loginId("aa").password("aa").email("admin@naver.com")
 //        .role("admin").name("김정우").telephone("010-8541-9497").build();
 //    memberService.save(admin);
 //
 //    Member member = Member.builder().loginId("bb").password("bb").email("member@naver.com")
 //        .role("member").name("김선우").telephone("010-8541-9497").build();
-//
-//    memberService.save(member);
+
+//        for(int i = 0; i<20; i++)
+//    {
+//      Member member = Member.builder().loginId("member" + i).password("asdf1234!!").email("member"+i+"@naver.com")
+//          .role("member").name("홍길"+"A").telephone("010-1234-949"+i).build();
+//      memberService.save(member);
+//    }
+
 //
 //    for(int i = 0; i<20; i++)
 //    {
@@ -62,7 +72,7 @@ public class InitDb {
 //
 //      commentService.createComment(comment);
 //    }
-//
+
 //    log.info("DB INIT PASS");
 //  }
 
@@ -76,11 +86,11 @@ public class InitDb {
 //  }
 
 
-  @PostConstruct
-  @Transactional
-  public void init() {
-    Board board = boardRepository.findById(1L).orElseThrow(NullPointerException::new);
-
+//  @PostConstruct
+//  @Transactional
+//  public void init() {
+//    Board board = boardRepository.findById(1L).orElseThrow(NullPointerException::new);
+//
 
 
 //    Comment comment1 = Comment.builder().content("1").ref(1L).step(0L).refOrder(0L).answerNum(0L).parentNum(null).board(board).build();
@@ -126,6 +136,6 @@ public class InitDb {
 //    commentService.saveHierarchyOrders(comment2);
 //    commentService.saveHierarchyOrders(comment3);
 //    commentService.saveHierarchyOrders(comment4);
-  }
+//  }
 
 }
