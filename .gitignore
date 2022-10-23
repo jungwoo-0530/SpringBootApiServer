@@ -1,1 +1,6 @@
-
+searchModule/config/
+searchMoudle/data_dir/
+searchMoudle/my_model/
+searchModule/train_model/
+searchModule/__pycache__
+backend/src/main/resources/
