@@ -1,40 +1,42 @@
-import React, {Component} from "react";
-import {FormControl, Image} from "react-bootstrap";
-import {Button, Form,  } from 'semantic-ui-react';
+import React, { Component } from "react";
+import { FormControl, Image } from "react-bootstrap";
+import { Button, Form, } from 'semantic-ui-react';
 import axios from "axios";
-import {} from "jquery.cookie";
+import { } from "jquery.cookie";
 import searchIcon from '../assets/img/search.png'
 import Typist from 'react-typist';
 import background from '../assets/img/back.png'
 import cogoToast from 'cogo-toast';
+import $ from "jquery";
+
 
 axios.defaults.withCredentials = true;
 
 class ServicePage extends Component {
-    
-    constructor(props){
+
+    constructor(props) {
         super(props);
         this.state = {
-          isPaid: false,
+            isPaid: false,
         }
-      }
-    
+    }
+
     componentDidMount() {
         this.checkPermission()
 
     }
-    
+
     //유저의 결제 권한 확인
-    checkPermission = () =>{
-        axios.get('/api/user/checkPermission').then((res)=>{
-            if(res.data.message){
+    checkPermission = () => {
+        axios.get('/api/user/checkPermission').then((res) => {
+            if (res.data.message) {
                 cogoToast.error(res.data.message);
                 this.props.history.push("/login");
                 this.setState({
                     isPaid: false
                 });
             }
-            else{
+            else {
                 this.setState({
                     isPaid: true
                 });
@@ -48,36 +50,33 @@ class ServicePage extends Component {
     search = () => {
         const keyword = this.keyword.value;
 
-        if(keyword === ""){
+        if (keyword === "") {
             cogoToast.error("Keyword를 입력해주세요.");
             return;
         }
 
+        let send_param;
+        send_param = {
+            keyword: keyword
+        }
 
-        if(this.state.isPaid===true) {
-            axios.get('/api/search/authCheck').then((res)=>{
-                if(res.data.message){
-                    cogoToast.error(res.data.message);
-                    setTimeout(function() {
-                        window.location.href="/";
-                    }, 500);
+
+        axios.post(`/detect`, send_param,
+            {
+                headers: {
+                    'Authorization': 'Bearer ' + $.cookie('accessToken')
                 }
-                else{
-                    axios.post('/api/search',{'keyword': keyword}).then((res) => {
-                        cogoToast.success(res.data.message)
-                        setTimeout(function() {
-                            window.location.href="/";
-                        }, 500);
-                    }).catch((e) => {
-                        cogoToast.error(e)
-                    })
-                }
+            }).then((res) => {
+                window.location.href = "/";
+                cogoToast.success(res.data.message)
+                setTimeout(function () {
+                    window.location.href = "/";
+                }, 500);
+            }).catch((e) => {
+                cogoToast.error(e)
             })
 
-        }
-        else{
-            cogoToast.error("권한이 없습니다.")
-        }
+
     }
 
     handleKeyPress = (e) => {
@@ -88,57 +87,57 @@ class ServicePage extends Component {
 
 
 
-        render() {
+    render() {
 
-            const container = {
-                paddingTop: "10%",
-                backgroundImage: `url(${background})`,
-                backgroundColor: 'white',
-                backgroundSize: 'contain',
-                backgroundRepeat: 'no-repeat'
-            }
+        const container = {
+            paddingTop: "10%",
+            backgroundImage: `url(${background})`,
+            backgroundColor: 'white',
+            backgroundSize: 'contain',
+            backgroundRepeat: 'no-repeat'
+        }
 
-            const titleStyle = {
-                marginTop: "6%",
-                marginLeft: "30%",
-                marginRight: "30%",
-                textAlign: 'center',
-                color: 'white',
-                backgroundColor: '#00ABDF',
-            };
-            const formStyle = {
-                marginTop: "8%",
-                width: "50%",
-                height: '100%',
-                marginLeft: "25%",
-                marginRight: "25%",
-                marginBottom: "20%",
-                paddingLeft: '2%',
-                paddingRight: '1%',
-                backgroundColor: 'white',
-                border: "2px solid #00ABDF",
-                borderRadius: "20px",
-            };
-            const formInputStyle = {
-                marginTop: '5px',
-                marginBottom: '5px',
-                width: '100%',
-                height: '40px',
-                border: "0px",
-                backgroundColor: 'rgba(256,256,256,0.3)',
-                textAlign: 'center'
-            }
-            const buttonStyle = {
-                marginTop: '5px',
-                marginBottom: '5px',
-                height: '40px',
-                backgroundColor: 'rgba(256,256,256,0.2)'
-            }
-            const iconStyle = {
-                marginTop: '10px',
-                marginBottom: '10px',
-                height: '30px',
-            }
+        const titleStyle = {
+            marginTop: "6%",
+            marginLeft: "30%",
+            marginRight: "30%",
+            textAlign: 'center',
+            color: 'white',
+            backgroundColor: '#00ABDF',
+        };
+        const formStyle = {
+            marginTop: "8%",
+            width: "50%",
+            height: '100%',
+            marginLeft: "25%",
+            marginRight: "25%",
+            marginBottom: "20%",
+            paddingLeft: '2%',
+            paddingRight: '1%',
+            backgroundColor: 'white',
+            border: "2px solid #00ABDF",
+            borderRadius: "20px",
+        };
+        const formInputStyle = {
+            marginTop: '5px',
+            marginBottom: '5px',
+            width: '100%',
+            height: '40px',
+            border: "0px",
+            backgroundColor: 'rgba(256,256,256,0.3)',
+            textAlign: 'center'
+        }
+        const buttonStyle = {
+            marginTop: '5px',
+            marginBottom: '5px',
+            height: '40px',
+            backgroundColor: 'rgba(256,256,256,0.2)'
+        }
+        const iconStyle = {
+            marginTop: '10px',
+            marginBottom: '10px',
+            height: '30px',
+        }
 
         return (
             <div className="full-height" style={container}>
@@ -151,11 +150,11 @@ class ServicePage extends Component {
                 </div>
                 <Form>
                     <Form.Group style={formStyle}>
-                        <Image src={searchIcon} style={iconStyle}/>
+                        <Image src={searchIcon} style={iconStyle} />
                         <FormControl style={formInputStyle}
-                                     ref={ref => (this.keyword = ref)}
-                                     onKeyPress={this.handleKeyPress}
-                                     placeholder="keyword ( 추천: Keyword 무료보기, Keyowrd 다시보기 )"></FormControl>
+                            ref={ref => (this.keyword = ref)}
+                            onKeyPress={this.handleKeyPress}
+                            placeholder="keyword ( 추천: Keyword 무료보기, Keyowrd 다시보기 )"></FormControl>
                         <Button
                             onClick={this.search}
                             type="button"

@@ -31,7 +31,12 @@ class PostList extends Component {
         boardName: "",
 
         currentPage: 0,
-        totalPages: 0
+        totalPages: 0,
+
+        search: false,
+
+        searchOption: "",
+        keyword: ""
 
     }
 
@@ -41,7 +46,7 @@ class PostList extends Component {
                 postType: "notification",
                 boardName: "공지사항"
             });
-            return { post_type: "notification" }
+            return "notification";
         } else if (this.props.match.url === '/qna') {
             console.log("현재 /qna입니다.");
             this.setState({
@@ -50,34 +55,65 @@ class PostList extends Component {
             }, () => {
                 console.log(this.state.postType)
             });
-            return { post_type: "qna" }
+            return "qna";
         }
     }
 
     componentDidMount() {
         // this.Category();
-        this.getPosts(this.state.currentPage);
+        if(!this.state.search){
+            this.getPosts(this.state.currentPage);
+        }
+
+        
+        
     }
 
 
-    
+
 
     getPosts = (pageNumber) => {
 
+        
+        console.log(this.state.searchOption);
+        console.log(this.state.search);
+        console.log(this.state.keyword);
         console.log(this.state.boardName);
         console.log(this.state.postType);
-        const send_param = this.Category();
+        // const send_param = this.Category();
+        let returnType = this.Category();
+        let send_params;
+        let send_body;
+        let url;
+        if(this.state.search == true){
+            url = `/boards/search`;
+            send_params = {
+                boardType: returnType,
+                page: pageNumber,
+                
+            };
+            send_body ={
+                option: this.state.searchOption,
+                keyword: this.state.keyword
+            };
+        }
+        
+            url = `/boards`;
+            send_params = {
+                boardType: returnType,
+                page: pageNumber
+            };
 
+
+        console.log(send_params.boardType)
 
         /* 권한 체크ajax */
         axios
             .get(
                 axios // 실제 post List 가져오기
-                    .get(`/boards`, {
-                        params: {
-                            boardType: send_param.post_type,
-                            page: pageNumber
-                        },
+                    .get(url, {
+                        params: send_params,
+                        send_body,
                         withCredentials: true
                     })
                     .then(returnData => {
@@ -147,9 +183,35 @@ class PostList extends Component {
         console.log(this.state.currentPage);
         console.log(pageNumber);
 
-        this.getPosts(pageNumber.selected);
-        this.forceUpdate();
+            this.getPosts(pageNumber.selected);
+            this.forceUpdate();
+        
+        
         // window.location.reload();
+    }
+
+
+    /////////////////검색
+    handleSearch = (e) =>{
+       this.setState({
+            keyword: e.target.value
+       })
+        
+    }
+
+
+    onSubmit = () =>{
+        this.setState({
+            search: true
+        })
+        this.getPosts(0);
+    }
+
+    handleSearchOption = (e) =>{
+        this.setState({
+            searchOption: e.target.value
+        })
+
     }
 
 
@@ -182,8 +244,8 @@ class PostList extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {this.state.posts.map((post)=>(
-                                <PostRow PostRow={post}/>
+                            {this.state.posts.map((post) => (
+                                <PostRow PostRow={post} />
                             ))}
                         </tbody>
                     </Table>
@@ -191,6 +253,28 @@ class PostList extends Component {
                 </div>
                 <div>
                     <PaginationPostAndComment totalPage={this.state.totalPages} paginate={this.paginate} />
+                </div>
+                <div>
+                <form>
+                    <select value={this.state.searchOption} onChange={this.handleSearchOption}>
+                        <option value="title">
+                            제목
+                        </option>
+                        <option value="titleAndContent">
+                            제목 + 내용
+                        </option>
+                        <option value="author">
+                            글쓴이
+                        </option>
+                    </select>
+                    
+                    <input type="text" placeholder="" onChange={this.handleSearch}/>
+                    <div>
+                        <Button type="submit" onClick={this.onSubmit}>검색</Button>
+                    </div>
+                    </form>
+
+                    
                 </div>
 
             </div>

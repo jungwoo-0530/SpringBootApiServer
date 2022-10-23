@@ -20,6 +20,8 @@ import PostList from "./components/Post/PostList";
 
 import UserList from './User/NewUserList';
 
+// import PostSearchList from './Post/SearchPosts';
+
 
 class Body extends Component {
     render() {
@@ -37,6 +39,9 @@ class Body extends Component {
                         <Route exact path="/qna" component={PostList}/>
                         <Route exact path="/notice" component={PostList}/>
                         <Route path="/uploads" component={Upload}/>
+                        
+                        {/* <Route exact path="/posts/search" component={PostSearchList}/> */}
+
 
                         <Route path="/userlist" component={UserList}/>
          

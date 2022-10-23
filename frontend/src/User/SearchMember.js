@@ -4,12 +4,11 @@ import axios from "axios";
 import $ from "jquery";
 import { Table, Button } from "react-bootstrap";
 import cogoToast from 'cogo-toast';
-import SearchMember from './SearchMember';
 
 
 
 
-const NewUserList = ({ list, total }) => {
+const SearchMember = ({ list, total, searchWords }) => {
 
     const obsRef = useRef(null); 	//observer Element
     const [List, setList] = useState([]);	//Post List
@@ -21,7 +20,7 @@ const NewUserList = ({ list, total }) => {
 
     const [role, setRole] = useState("");
 
-    const[search, setSearch] = useState("");
+    const [search, setSearch] = useState("");
 
     // const [totalElement, setTotalElement] = useState(null);
 
@@ -40,11 +39,11 @@ const NewUserList = ({ list, total }) => {
 
     //권한 변경
     const handleRole = (memberId, loginID) => (e) => {
-        if(window.confirm("권한을 변경 하시겠습니까?")){
+        if (window.confirm("권한을 변경 하시겠습니까?")) {
             setRole(e.target.value);
             updateUserRole(memberId, e.target.value);
         }
-        
+
     }
 
     const obsHandler = ((entries) => { //옵저버 콜백함수
@@ -56,7 +55,7 @@ const NewUserList = ({ list, total }) => {
     })
 
 
-    const updateUserRole = (memberId, role) =>{
+    const updateUserRole = (memberId, role) => {
 
         console.log(role);
         console.log(memberId);
@@ -65,24 +64,24 @@ const NewUserList = ({ list, total }) => {
             role: role
         }
 
-        
+
         axios
-        .put(`/members/${memberId}`, send_param,
-        {
-          headers: {
-            'Authorization': 'Bearer ' + $.cookie('accessToken'),
-          }
-        })
-        .then(response =>{
-            if(response.status ==200){
-                cogoToast.success(response.data.message);
-            }else{
-                cogoToast.error("role 수정 실패");
-            }
-        })
-        .catch(err => {
-            console.log(err);
-        });
+            .put(`/members/${memberId}`, send_param,
+                {
+                    headers: {
+                        'Authorization': 'Bearer ' + $.cookie('accessToken'),
+                    }
+                })
+            .then(response => {
+                if (response.status == 200) {
+                    cogoToast.success(response.data.message);
+                } else {
+                    cogoToast.error("role 수정 실패");
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
 
     };
 
@@ -92,8 +91,9 @@ const NewUserList = ({ list, total }) => {
 
         // ---- Get Data Code ---
         // const res = await axios({ method: 'GET', url: `/members`});
-        const res = await axios.get(`/members`, {
-            params:{
+        const res = await axios.get(`/members/search`, {
+            params: {
+                searchWord: searchWords,
                 page: page
             },
         });
@@ -118,26 +118,22 @@ const NewUserList = ({ list, total }) => {
 
 
 
-///////////////////검색창
+    ///////////////////검색창
 
 
-    const handleSearch = (e) =>{
-        setSearch(e.target.value);
+    const handleSearch = (e) => {
+        getUser(e.target.value);
     }
 
-    const Search = (e) =>{
+    const Search = (e) => {
 
-        setPage(0);
-        
-
-        if(search == null || search == ''){
+        if (search == null || search == '') {
             axios
-            .get(`/member/search`, {
-                params: {
-                    searchWord: search,
-                    page: page
-                }
-            })
+                .get(`/member/search`, {
+                    params: {
+                        searchWord: search
+                    }
+                })
         }
 
 
@@ -145,7 +141,7 @@ const NewUserList = ({ list, total }) => {
 
 
     return (
-        
+
         <div className="container">
             {/* <div style={{ marginBottom: "1%" }}>
                 <h2>{this.state.boardName}</h2>
@@ -155,7 +151,7 @@ const NewUserList = ({ list, total }) => {
                 <h5>{this.state.totalPages} 중 {this.state.currentPage + 1} 페이지</h5>
             </div> */}
             <form onSubmit={e => Search(e)}>
-                <input type="text" value={search} placeholder="" onChange={handleSearch}/>
+                <input type="text" value={search} placeholder="" onChange={handleSearch} />
                 <Button type='submit'>검색</Button>
             </form>
             <div>
@@ -194,7 +190,7 @@ const NewUserList = ({ list, total }) => {
                                                         ADMIN
                                                     </option>
                                                     <option value="SUBSCRIBER">
-                                                    SUBSCRIBER
+                                                        SUBSCRIBER
                                                     </option>
                                                     <option value="MEMBER">
                                                         MEMBER
@@ -211,18 +207,18 @@ const NewUserList = ({ list, total }) => {
 
                         {
                             load ?
-                            <div>로딩중</div>
-                            :
-                            <></>
+                                <div>로딩중</div>
+                                :
+                                <></>
                         }
 
                     </tbody>
                 </Table>
 
-                <div className="py-3 text-center"  ref={obsRef}>...</div>
+                <div className="py-3 text-center" ref={obsRef}>...</div>
             </div>
             <div>
-                
+
             </div>
 
         </div>
@@ -233,4 +229,4 @@ const NewUserList = ({ list, total }) => {
 
 
 
-export default NewUserList;
+export default SearchMember;
