@@ -1,7 +1,7 @@
 package com.jungwoo.apiserver.serviece;
 
 import com.jungwoo.apiserver.domain.maria.Member;
-import com.jungwoo.apiserver.dto.member.MemberPageDto;
+import com.jungwoo.apiserver.dto.maria.member.MemberPageDto;
 import com.jungwoo.apiserver.repository.maria.MemberRepository;
 import com.jungwoo.apiserver.security.jwt.JwtAuthenticationProvider;
 import lombok.RequiredArgsConstructor;

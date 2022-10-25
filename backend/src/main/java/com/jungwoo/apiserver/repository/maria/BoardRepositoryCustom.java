@@ -1,7 +1,7 @@
 package com.jungwoo.apiserver.repository.maria;
 
-import com.jungwoo.apiserver.dto.board.BoardPageDto;
-import com.jungwoo.apiserver.dto.board.BoardSearchCondition;
+import com.jungwoo.apiserver.dto.maria.board.BoardPageDto;
+import com.jungwoo.apiserver.dto.maria.board.BoardSearchCondition;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

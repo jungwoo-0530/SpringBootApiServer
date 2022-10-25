@@ -1,4 +1,4 @@
-package com.jungwoo.apiserver.dto.comment;
+package com.jungwoo.apiserver.dto.maria.comment;
 
 import com.jungwoo.apiserver.domain.maria.Comment;
 import lombok.AllArgsConstructor;

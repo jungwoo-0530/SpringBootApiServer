@@ -1,4 +1,4 @@
-package com.jungwoo.apiserver.dto.detect;
+package com.jungwoo.apiserver.dto.mongo.detect;
 
 import lombok.*;
 
@@ -10,8 +10,7 @@ import java.time.ZonedDateTime;
  * description  :
  */
 
-@Getter
-@Setter
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

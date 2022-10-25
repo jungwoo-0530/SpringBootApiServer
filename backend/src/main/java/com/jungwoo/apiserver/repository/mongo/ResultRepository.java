@@ -15,7 +15,7 @@ import java.util.List;
  */
 
 @Repository
-public interface ResultRepository extends MongoRepository<Result, String> {
+public interface ResultRepository extends MongoRepository<Result, String>{
 
   @Query("{'keyword_id': :#{#keywordId}, 'label': :#{#label}}")
   List<Result> findAllByKeywordIdAndLabel(@Param("keywordId") String keywordId, @Param("label")Integer label);

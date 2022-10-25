@@ -2,8 +2,8 @@ package com.jungwoo.apiserver.serviece;
 
 import com.jungwoo.apiserver.domain.maria.Board;
 import com.jungwoo.apiserver.domain.maria.Member;
-import com.jungwoo.apiserver.dto.board.BoardPageDto;
-import com.jungwoo.apiserver.dto.board.BoardSearchCondition;
+import com.jungwoo.apiserver.dto.maria.board.BoardPageDto;
+import com.jungwoo.apiserver.dto.maria.board.BoardSearchCondition;
 import com.jungwoo.apiserver.repository.maria.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
