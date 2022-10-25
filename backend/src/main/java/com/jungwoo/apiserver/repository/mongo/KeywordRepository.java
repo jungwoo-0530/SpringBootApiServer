@@ -13,6 +13,5 @@ import java.security.Key;
  */
 @Repository
 public interface KeywordRepository extends MongoRepository<Keyword, String> {
-  boolean existsByKeyword(String keyword);
 
 }

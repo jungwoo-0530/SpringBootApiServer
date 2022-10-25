@@ -19,12 +19,6 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class InitDb {
 
-  private final BoardRepository boardRepository;
-  private final MemberRepository memberRepository;
-  private final BoardService boardService;
-  private final MemberService memberService;
-  private final CommentService commentService;
-
 //  @PostConstruct
 //  @Transactional
 //  public void init(){

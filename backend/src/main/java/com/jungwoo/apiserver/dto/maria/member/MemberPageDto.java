@@ -1,6 +1,7 @@
-package com.jungwoo.apiserver.dto.member;
+package com.jungwoo.apiserver.dto.maria.member;
 
 import com.querydsl.core.annotations.QueryProjection;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ import java.time.ZonedDateTime;
  */
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class MemberPageDto {
 
@@ -28,13 +30,4 @@ public class MemberPageDto {
   private ZonedDateTime createDate;
 
 
-
-  @QueryProjection
-  public MemberPageDto(Long id, String loginId, String name, String role, ZonedDateTime createDate) {
-    this.id = id;
-    this.loginId = loginId;
-    this.name = name;
-    this.role = role;
-    this.createDate = createDate;
-  }
 }

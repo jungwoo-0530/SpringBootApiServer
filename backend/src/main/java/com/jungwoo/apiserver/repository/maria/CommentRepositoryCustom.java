@@ -2,7 +2,7 @@ package com.jungwoo.apiserver.repository.maria;
 
 import com.jungwoo.apiserver.domain.maria.Comment;
 import com.jungwoo.apiserver.domain.maria.Member;
-import com.jungwoo.apiserver.dto.comment.CommentPageDto;
+import com.jungwoo.apiserver.dto.maria.comment.CommentPageDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

@@ -1,4 +1,4 @@
-package com.jungwoo.apiserver.dto.member;
+package com.jungwoo.apiserver.dto.maria.member;
 
 /**
  * fileName     : MemberSearchCondition

@@ -2,12 +2,13 @@ package com.jungwoo.apiserver.repository.maria.Impl;
 
 import com.jungwoo.apiserver.domain.maria.Comment;
 import com.jungwoo.apiserver.domain.maria.Member;
-//import com.jungwoo.apiserver.dto.comment.CommentPageDto;
-//import com.jungwoo.apiserver.dto.comment.QCommentPageDto;
-import com.jungwoo.apiserver.dto.comment.CommentPageDto;
-import com.jungwoo.apiserver.dto.comment.QCommentPageDto;
+//import com.jungwoo.apiserver.dto.maria.comment.CommentPageDto;
+//import com.jungwoo.apiserver.dto.maria.comment.QCommentPageDto;
+import com.jungwoo.apiserver.dto.maria.comment.CommentPageDto;
+//import com.jungwoo.apiserver.dto.maria.comment.QCommentPageDto;
 import com.jungwoo.apiserver.repository.maria.CommentRepositoryCustom;
 import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -17,7 +18,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 import static com.jungwoo.apiserver.domain.maria.QComment.comment;
@@ -27,12 +32,27 @@ import static com.jungwoo.apiserver.domain.maria.QComment.comment;
  * author       : jungwoo
  * description  :
  */
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 public class CommentRepositoryImpl implements CommentRepositoryCustom {
-
+//
+//  public CommentRepositoryImpl() {
+//    super(Comment.class);
+//  }
+//
+//  private EntityManager em;
+//  private JPAQueryFactory jpaQueryFactory;
+//
+//  @Override
+//  @PersistenceContext(unitName = "firstEntityManager")
+//  public void setEntityManager(EntityManager entityManager) {
+//    super.setEntityManager(entityManager);
+//    em = entityManager;
+//    this.jpaQueryFactory = new JPAQueryFactory(entityManager);
+//  }
+//
   private final JPAQueryFactory jpaQueryFactory;
-
 
   @Override
   public void adjustHierarchyOrders(Comment newComment) {
@@ -53,22 +73,24 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
         .execute();
   }
 
+
   @Override
   public Page<CommentPageDto> findCommentsOrderByHierarchy(Pageable pageable, Long boardId, Member member) {
-    QCommentPageDto qCommentPageDto = new QCommentPageDto(
-        comment.id.as("id"),
-        comment.available.as("available"),
-        getEditableEq(member).as("editable"),
-        comment.member.loginId.as("author"),
-        comment.content.as("content"),
-        comment.parentComment.id.as("parentId"),
-        comment.depth.as("deep"),
-        comment.createDate.as("createDate"),
-        comment.updateDate.as("updateDate"));
 
 
     JPAQuery<CommentPageDto> query =  jpaQueryFactory
-        .select(qCommentPageDto)
+        .select(
+            Projections.fields(CommentPageDto.class,
+                comment.id.as("id"),
+                comment.available.as("available"),
+                getEditableEq(member).as("editable"),
+                comment.member.loginId.as("author"),
+                comment.content.as("content"),
+                comment.parentComment.id.as("parentId"),
+                comment.depth.as("deep"),
+                comment.createDate.as("createDate"),
+                comment.updateDate.as("updateDate"))
+        )
         .where
             (
                 ExpressionUtils.and(
@@ -112,6 +134,66 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
 
     return new PageImpl<>(content, pageable, total);
   }
+
+//  @Override
+//  public Page<CommentPageDto> findCommentsOrderByHierarchy(Pageable pageable, Long boardId, Member member) {
+//    QCommentPageDto qCommentPageDto = new QCommentPageDto(
+//        comment.id.as("id"),
+//        comment.available.as("available"),
+//        getEditableEq(member).as("editable"),
+//        comment.member.loginId.as("author"),
+//        comment.content.as("content"),
+//        comment.parentComment.id.as("parentId"),
+//        comment.depth.as("deep"),
+//        comment.createDate.as("createDate"),
+//        comment.updateDate.as("updateDate"));
+//
+//
+//    JPAQuery<CommentPageDto> query =  jpaQueryFactory
+//        .select(qCommentPageDto)
+//        .where
+//            (
+//                ExpressionUtils.and(
+//                        (
+//                            comment.board.id.eq(boardId)
+//                        ),
+//                    (
+//                        comment.isLastComment.eq(true).
+//                            and(comment.available.eq(false))
+//                        ).not()
+//                )
+//
+//
+//            )
+//        .from(comment)
+//        .orderBy(comment.rootComment.id.asc(),
+//            comment.leftNode.asc())
+//        .offset(pageable.getOffset())
+//        .limit(pageable.getPageSize());
+//
+//
+//    long total = jpaQueryFactory
+//        .select(comment)
+//        .from(comment)
+//        .where
+//            (
+//                ExpressionUtils.and(
+//                        (
+//                            comment.board.id.eq(boardId)
+//                        ),
+//                        (
+//                            comment.isLastComment.eq(true).
+//                                and(comment.available.eq(false))
+//                        ).not()
+//
+//            )
+//            )
+//        .fetch().size();
+//
+//    List<CommentPageDto> content = query.fetch();
+//
+//    return new PageImpl<>(content, pageable, total);
+//  }
 
   private static BooleanExpression getEditableEq(Member member) {
 

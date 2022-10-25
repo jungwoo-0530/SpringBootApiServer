@@ -1,8 +1,7 @@
-package com.jungwoo.apiserver.dto.member;
+package com.jungwoo.apiserver.dto.maria.member;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 
 /**

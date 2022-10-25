@@ -1,6 +1,6 @@
 package com.jungwoo.apiserver.repository.maria;
 
-import com.jungwoo.apiserver.dto.member.MemberPageDto;
+import com.jungwoo.apiserver.dto.maria.member.MemberPageDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

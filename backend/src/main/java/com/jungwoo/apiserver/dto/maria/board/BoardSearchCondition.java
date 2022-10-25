@@ -1,4 +1,4 @@
-package com.jungwoo.apiserver.dto.board;
+package com.jungwoo.apiserver.dto.maria.board;
 
 import lombok.Data;
 
