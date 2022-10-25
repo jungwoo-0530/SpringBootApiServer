@@ -1,14 +1,19 @@
 package com.jungwoo.apiserver.serviece;
 
+import com.jungwoo.apiserver.domain.mongo.CountDomain;
 import com.jungwoo.apiserver.domain.mongo.Keyword;
 import com.jungwoo.apiserver.domain.mongo.Result;
-import com.jungwoo.apiserver.dto.detect.DetectDto;
+import com.jungwoo.apiserver.dto.mongo.countdomain.CountDomainPageDto;
+import com.jungwoo.apiserver.dto.mongo.detect.DetectDto;
+import com.jungwoo.apiserver.repository.mongo.CountDomainRepository;
 import com.jungwoo.apiserver.repository.mongo.KeywordRepository;
 import com.jungwoo.apiserver.repository.mongo.ResultRepository;
 import com.jungwoo.apiserver.util.csv.CsvUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -25,7 +30,9 @@ import java.io.*;
 import java.net.URI;
 import java.time.ZonedDateTime;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -49,6 +56,8 @@ public class DetectService {
   private final JavaMailSender javaMailSender;
   private final KeywordRepository keywordRepository;
   private final ResultRepository resultRepository;
+
+  private final CountDomainRepository countDomainRepository;
 
   private final CsvUtil csvUtil;
 
@@ -94,9 +103,6 @@ public class DetectService {
 
   }
 
-
-
-
   public void sendEmail(DetectDto detectDto, String fileName) throws MessagingException, UnsupportedEncodingException {
 
     MimeMessage message = javaMailSender.createMimeMessage();
@@ -119,11 +125,6 @@ public class DetectService {
   }
 
 
-  @Transactional
-  public String findKeywordById(String id){
-
-    return keywordRepository.findById(id).orElseThrow(NullPointerException::new).getKeyword();
-  }
 
   public String makeCsv(String keywordId, String userEmail, String keyword) throws IOException {
     List<Result> result = resultRepository.findAllByKeywordIdAndLabel(keywordId, 0);
@@ -131,6 +132,23 @@ public class DetectService {
     String title = userEmail + "_" + keyword;
 
     return csvUtil.writeCSV(title, result.stream().map(r -> r.getUrl()).collect(Collectors.toList()));
+  }
+
+
+  @Transactional
+  public Map<String, Object> findCountDomainPage(Pageable pageable) {
+    Page<CountDomain> allPageSort = countDomainRepository.findAll(pageable);
+    List<CountDomain> a = allPageSort.getContent();
+
+    Map<String, Object> response = new HashMap<>();
+    response.put("content", a);
+    response.put("pageSize", pageable.getPageSize());
+    response.put("currentPage", allPageSort.getNumber());
+    response.put("totalItems", allPageSort.getTotalElements());
+    response.put("totalPages", allPageSort.getTotalPages());
+    response.put("numberOfElements", allPageSort.getContent().size());
+
+    return response;
   }
 
 }

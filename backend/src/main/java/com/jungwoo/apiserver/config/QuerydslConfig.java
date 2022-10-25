@@ -1,9 +1,13 @@
 package com.jungwoo.apiserver.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.data.mongodb.MongoDatabaseFactory;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -16,6 +20,8 @@ import javax.persistence.PersistenceContext;
 @EnableJpaAuditing
 @Configuration
 public class QuerydslConfig {
+
+
 
   @PersistenceContext
   private EntityManager entityManager;
@@ -30,5 +36,16 @@ public class QuerydslConfig {
     return new JPAQueryFactory(entityManager);
   }
 
+  @Value("${spring.data.mongodb.full}")
+  private String connectionString;
+
+  public MongoDatabaseFactory mongoDatabaseFactory() {
+    return new SimpleMongoClientDatabaseFactory(connectionString);
+  }
+
+  @Bean
+  public MongoTemplate mongoTemplate() {
+    return new MongoTemplate(mongoDatabaseFactory());
+  }
 
 }
