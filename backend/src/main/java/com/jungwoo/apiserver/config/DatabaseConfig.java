@@ -19,14 +19,14 @@ import javax.persistence.PersistenceContext;
  */
 @EnableJpaAuditing
 @Configuration
-public class QuerydslConfig {
+public class DatabaseConfig {
 
 
-
+  //JPA
   @PersistenceContext
   private EntityManager entityManager;
 
-  public QuerydslConfig() {
+  public DatabaseConfig() {
   }
 
   //JPAQueryFactory를 빈으로 등록함으로써 repository에서 바로 가져와서 사용.
@@ -36,7 +36,7 @@ public class QuerydslConfig {
     return new JPAQueryFactory(entityManager);
   }
 
-  @Value("${spring.data.mongodb.full}")
+  @Value("${spring.data.mongodb.uri}")
   private String connectionString;
 
   public MongoDatabaseFactory mongoDatabaseFactory() {
@@ -47,5 +47,6 @@ public class QuerydslConfig {
   public MongoTemplate mongoTemplate() {
     return new MongoTemplate(mongoDatabaseFactory());
   }
+
 
 }
